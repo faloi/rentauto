@@ -9,7 +9,7 @@
 Las credenciales se guardan en un archivo fuera del código fuente, para que cada uno pueda tener el usuario y contraseña que quiera. Lo que hay que hacer es crear un archivo _src/main/resources/db.properties_ con el siguiente contenido:
 
 ```
-jdbc.user=root
+jdbc.username=root
 jdbc.password=tupassword
 ```
  
