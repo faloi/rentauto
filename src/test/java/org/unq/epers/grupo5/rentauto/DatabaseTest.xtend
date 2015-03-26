@@ -1,26 +1,13 @@
 package org.unq.epers.grupo5.rentauto
 
-import java.io.FileInputStream
 import java.sql.Connection
 import java.sql.DriverManager
-import java.util.Properties
-import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.unq.epers.grupo5.rentauto.dbutils.Credentials
 
 import static org.junit.Assert.*
-
-@Accessors
-class Credentials {
-	String user
-	String password
-
-	new(String user, String password) {
-		this.user = user
-		this.password = password
-	}
-}
 
 class DatabaseTest {
 	static val DATABASE_NAME = "EPERS_TEST"
@@ -80,12 +67,7 @@ class DatabaseTest {
 	}
 
 	def getCredentials() {
-		val props = new Properties()
-		val in = new FileInputStream("src/main/resources/db.properties")
-		props.load(in)
-		in.close()
-
-		new Credentials(props.getProperty("jdbc.username"), props.getProperty("jdbc.password"))
+		Credentials.loadFromFile("src/main/resources/db.properties")
 	}
 
 	def executeCommand(String command) {
