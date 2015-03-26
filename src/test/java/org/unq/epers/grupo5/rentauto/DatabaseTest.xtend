@@ -7,6 +7,18 @@ import org.junit.Before
 import org.junit.Test
 
 import static org.junit.Assert.*
+import org.eclipse.xtend.lib.annotations.Accessors
+
+@Accessors
+class Credentials {
+	String user
+	String password
+	
+	new(String user, String password) {
+		this.user = user
+		this.password = password
+	}
+}
 
 class DatabaseTest {
 	static val DATABASE_NAME = "EPERS_TEST"
@@ -60,8 +72,14 @@ class DatabaseTest {
 	
 	def Connection getConnection(String databaseName) {
 		Class.forName("com.mysql.jdbc.Driver")
-		DriverManager.getConnection('''jdbc:mysql://localhost/«databaseName»''', "root", "root")
-	}	
+		
+		val credentials = this.credentials
+		DriverManager.getConnection('''jdbc:mysql://localhost/«databaseName»''', credentials.user, credentials.password)
+	}
+	
+	def getCredentials() {
+		new Credentials("root", "root")
+	}
 	
 	def executeCommand(String command) {
 		val connection = this.connection
