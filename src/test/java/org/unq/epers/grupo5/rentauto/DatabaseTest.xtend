@@ -1,19 +1,21 @@
 package org.unq.epers.grupo5.rentauto
 
+import java.io.FileInputStream
 import java.sql.Connection
 import java.sql.DriverManager
+import java.util.Properties
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 import static org.junit.Assert.*
-import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors
 class Credentials {
 	String user
 	String password
-	
+
 	new(String user, String password) {
 		this.user = user
 		this.password = password
@@ -22,12 +24,12 @@ class Credentials {
 
 class DatabaseTest {
 	static val DATABASE_NAME = "EPERS_TEST"
-	
+
 	@Before
 	def void setUp() {
 		executeCommand('''CREATE DATABASE «DATABASE_NAME»''')
 	}
-	
+
 	@After
 	def void tearDown() {
 		executeCommand('''DROP DATABASE «DATABASE_NAME»''')
@@ -46,10 +48,10 @@ class DatabaseTest {
 			  PRIMARY KEY (`ID`),
 			  INDEX `CODIGO`(`CODIGO`)
 			)
-		'''				
-		
+		'''
+
 		conn.createStatement.executeUpdate(createTable)
-		
+
 		val ps = conn.prepareStatement('''INSERT INTO «tableName» (NOMBRE, CODIGO) VALUES (?,?)''');
 		ps.setString(1, "UnaAerolinea");
 		ps.setString(2, "UNA");
@@ -69,24 +71,29 @@ class DatabaseTest {
 	def Connection getConnection() {
 		this.getConnection("")
 	}
-	
+
 	def Connection getConnection(String databaseName) {
 		Class.forName("com.mysql.jdbc.Driver")
-		
+
 		val credentials = this.credentials
 		DriverManager.getConnection('''jdbc:mysql://localhost/«databaseName»''', credentials.user, credentials.password)
 	}
-	
+
 	def getCredentials() {
-		new Credentials("root", "root")
+		val props = new Properties()
+		val in = new FileInputStream("src/main/resources/db.properties")
+		props.load(in)
+		in.close()
+
+		new Credentials(props.getProperty("jdbc.username"), props.getProperty("jdbc.password"))
 	}
-	
+
 	def executeCommand(String command) {
 		val connection = this.connection
 		val statement = connection.createStatement
-		
+
 		statement.executeUpdate(command)
-		
+
 		statement.close
 		connection.close
 	}
