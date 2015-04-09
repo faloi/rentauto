@@ -60,8 +60,8 @@ class UsuarioHome extends HomeDb<Usuario, String> {
 		stmt.setString(4,objeto.passwd)
 		stmt.setString(5,objeto.email)
 		stmt.setObject(6,objeto.nacimiento, Types.DATE)
-		stmt.setString(7,objeto.cod_verif)
-		stmt.setBoolean(8,objeto.validado)
+		stmt.setString(7,objeto.codigo_validacion)
+		stmt.setBoolean(8,objeto.is_validado)
 
 		stmt.execute
 		stmt.close

@@ -23,8 +23,8 @@ class Usuario {
 		this.passwd = passwd
 		this.email = email
 		this.nacimiento = nacimiento 
-		this.cod_verif = cod_verif
-		this.validado = validado 	
+		this.codigo_validacion = cod_verif
+		this.is_validado = validado 	
 	}
 	
 }
