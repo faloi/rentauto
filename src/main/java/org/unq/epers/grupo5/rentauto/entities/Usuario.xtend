@@ -4,8 +4,7 @@ import java.sql.Date
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors 
-class Usuario implements Entity<Integer> {
-	var Integer id
+class Usuario extends Entity {
 	var String nombre
 	var String apellido
 	var String username
