@@ -1,11 +1,10 @@
 package org.unq.epers.grupo5.rentauto
 
-import org.unq.epers.grupo5.rentauto.IHome
 import java.sql.Connection
-import java.sql.ResultSet
 import java.sql.PreparedStatement
-import java.util.List
+import java.sql.ResultSet
 import java.util.Map
+import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
 
 abstract class HomeDb<T,E> implements IHome<T,E> {
 	
@@ -38,7 +37,7 @@ abstract class HomeDb<T,E> implements IHome<T,E> {
 		stmt.close
 
 		if ( ! rs.next )	
-			throw new EntidadNoExiste()
+			throw new EntidadNoExisteException()
 
 		rsToEntity(rs)
 	}
