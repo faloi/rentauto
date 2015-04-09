@@ -1,11 +1,13 @@
 package org.unq.epers.grupo5.rentauto.persistence
 
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.ResultSet
-import java.util.Map
+import java.util.List
 import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
+import org.unq.epers.grupo5.rentauto.entities.Entity
 
-abstract class HomeDb<T> implements Home<T> {
+abstract class HomeDb<TEntity extends Entity> implements Home<TEntity> {
 	protected val Connection connection
 	protected val String tableName
 	 
@@ -16,31 +18,52 @@ abstract class HomeDb<T> implements Home<T> {
 	
 	def getPkName () { "id" }
 	
-	abstract def T resultSetToEntity(ResultSet rs)
+	abstract def TEntity resultSetToEntity(ResultSet rs)
 	
-	override getById(int id) {
+	override getById(Integer id) {
 		findBy('''«pkName» = «id»''')
 	}
 	
 	def findBy(String whereFilter) {
+		var columnsStr = columns.join(",")
 		val statement = connection.prepareStatement('''SELECT «columnsStr» FROM «tableName» WHERE «whereFilter»''')		
 		val resultSet = statement.executeQuery();
-
-		statement.close
 
 		if (!resultSet.next)	
 			throw new EntidadNoExisteException()
 
-		resultSetToEntity(resultSet)		
-	}
-	
-	abstract def Map<String, Integer> columns()
-	
-	def String columnsStr() {		
-		columns.keySet.filter[it!=pkName].join(",")
-	}
+		var entity = resultSetToEntity(resultSet)		
+		statement.close
+		entity
 
-	abstract override insert(T objeto)
+	}
 	
-	abstract override update(T objeto) 
+//	abstract def Map<String, Integer> columnTypes()
+	
+	abstract def List<String> columns()
+	
+
+	override insert(TEntity objeto) {
+		var columnsStr = columns.filter[it!=pkName].join(",")
+		val valuesPlaceholder = columns.filter [ it != pkName ].map [ "?" ].join(",")
+		executeStatement(objeto, '''INSERT INTO «tableName» («columnsStr») VALUES («valuesPlaceholder»)''')
+	}
+	
+	override update(TEntity objeto) {
+		val valuesPlaceholder = columns.filter [ it != pkName ].map [ '''«it» = ?''' ].join(",")
+		executeStatement(objeto, '''UPDATE «tableName» SET «valuesPlaceholder» WHERE «pkName»=«objeto.id»''')
+	}
+	
+	def executeStatement(TEntity entity, String query) {
+		val statement = connection.prepareStatement(query)
+
+		setColumnas(statement, entity)
+
+		statement.execute
+		statement.close		
+	}
+	
+	abstract def void setColumnas(PreparedStatement stmt, TEntity entity) 
+	
+	
 }

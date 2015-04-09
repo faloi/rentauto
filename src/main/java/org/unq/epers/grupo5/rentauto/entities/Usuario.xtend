@@ -1,11 +1,11 @@
 package org.unq.epers.grupo5.rentauto.entities
 
-import java.util.Date
+import java.sql.Date
 import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors 
-class Usuario {
-	var int id
+class Usuario implements Entity<Integer> {
+	var Integer id
 	var String nombre
 	var String apellido
 	var String username

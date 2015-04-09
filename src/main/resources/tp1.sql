@@ -9,7 +9,7 @@ CREATE TABLE `tpepers`.`usuario` (
   `email` varchar(255) DEFAULT NULL,
   `nacimiento` date DEFAULT NULL,
   `codigo_validacion` varchar(255) DEFAULT NULL,
-  `is_validado` bit DEFAULT 0,
+  `is_validado` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
