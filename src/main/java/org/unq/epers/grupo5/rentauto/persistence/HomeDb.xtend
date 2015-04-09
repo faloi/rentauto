@@ -6,7 +6,7 @@ import java.sql.ResultSet
 import java.util.Map
 import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
 
-abstract class HomeDb<T,E> implements IHome<T,E> {
+abstract class HomeDb<T,E> implements Home<T,E> {
 	
 	var Connection conn ;
 	val String pkName ; 
