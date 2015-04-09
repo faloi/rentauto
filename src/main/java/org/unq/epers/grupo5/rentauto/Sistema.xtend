@@ -1,31 +1,43 @@
 package org.unq.epers.grupo5.rentauto
 
 import org.unq.epers.grupo5.rentauto.entities.Usuario
+import org.unq.epers.grupo5.rentauto.exceptions.LoginIncorrectoException
 import org.unq.epers.grupo5.rentauto.exceptions.NuevaPasswordInvalidaException
-import org.unq.epers.grupo5.rentauto.exceptions.UsuarioNoExistenteException
-import org.unq.epers.grupo5.rentauto.exceptions.UsuarioYaExisteException
 import org.unq.epers.grupo5.rentauto.exceptions.ValidacionException
+import org.unq.epers.grupo5.rentauto.persistence.Database
+import org.unq.epers.grupo5.rentauto.persistence.UsuarioHome
 
 class Sistema {
+	val home = new UsuarioHome(new Database("usuario"))
 	
-	def void RegistrarUsuario(Usuario usuarioNuevo) throws UsuarioYaExisteException
-	{
-		
+	def void registrar(Usuario usuario) {
+		home.insert(usuario)
 	}
 	
-	def void ValidarCuenta(String codigoValidacion) throws ValidacionException
-	{
+	def void validarCuenta(Usuario usuario, String codigoValidacion) {
+		if (usuario.codigo_validacion != codigoValidacion)
+			throw new ValidacionException
+			
+		usuario.is_validado = true
 		
+		home.update(usuario)
 	}
 	
-	def Usuario IngresarUsuario(String username, String password) throws UsuarioNoExistenteException
-	{
+	def Usuario login(String username, String password) {
+		val usuario = home.findByUsername(username)
 		
+		if (usuario.password != password)
+			throw new LoginIncorrectoException
+			
+		usuario
 	}
 	
-	def void CambiarPassword( String username, String password, String nuevaPassword) throws NuevaPasswordInvalidaException 
-	{
+	def void cambiarPassword(Usuario usuario, String nuevaPassword) {
+		if (usuario.password == nuevaPassword)
+			throw new NuevaPasswordInvalidaException
+			
+		usuario.password = nuevaPassword
 		
+		home.update(usuario)
 	}
 }
-

@@ -1,7 +1,6 @@
 package org.unq.epers.grupo5.rentauto.persistence
 
 import java.sql.Connection
-import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.util.Map
 import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
@@ -19,11 +18,12 @@ abstract class HomeDb<T> implements Home<T> {
 	
 	abstract def T resultSetToEntity(ResultSet rs)
 	
-	override getById(int id) 
-	{
-		val statement = connection.prepareStatement('''SELECT «columnsStr» FROM «tableName» WHERE «pkName» = ?''')
-		statement.setObject(1, id, columns.get(pkName))
-		
+	override getById(int id) {
+		findBy('''«pkName» = «id»''')
+	}
+	
+	def findBy(String whereFilter) {
+		val statement = connection.prepareStatement('''SELECT «columnsStr» FROM «tableName» WHERE «whereFilter»''')		
 		val resultSet = statement.executeQuery();
 
 		statement.close
@@ -31,7 +31,7 @@ abstract class HomeDb<T> implements Home<T> {
 		if (!resultSet.next)	
 			throw new EntidadNoExisteException()
 
-		resultSetToEntity(resultSet)
+		resultSetToEntity(resultSet)		
 	}
 	
 	abstract def Map<String, Integer> columns()

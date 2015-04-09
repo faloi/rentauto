@@ -66,5 +66,8 @@ class UsuarioHome extends HomeDb<Usuario> {
 			"is_validado" 	-> Types.VARCHAR
 		}
 	}
-		
+	
+	def findByUsername(String username) {
+		findBy('''username = «username»''')
+	}
 }
