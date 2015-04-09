@@ -1,4 +1,4 @@
-package org.unq.epers.grupo5.rentauto
+package org.unq.epers.grupo5.rentauto.entities
 
 import java.util.Date
 import org.eclipse.xtend.lib.annotations.Accessors

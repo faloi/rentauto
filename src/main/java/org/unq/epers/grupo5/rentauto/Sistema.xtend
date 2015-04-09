@@ -1,5 +1,6 @@
 package org.unq.epers.grupo5.rentauto
 
+import org.unq.epers.grupo5.rentauto.entities.Usuario
 import org.unq.epers.grupo5.rentauto.exceptions.NuevaPasswordInvalidaException
 import org.unq.epers.grupo5.rentauto.exceptions.UsuarioNoExistenteException
 import org.unq.epers.grupo5.rentauto.exceptions.UsuarioYaExisteException

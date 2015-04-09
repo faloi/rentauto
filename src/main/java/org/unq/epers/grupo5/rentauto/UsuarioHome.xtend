@@ -3,6 +3,7 @@ package org.unq.epers.grupo5.rentauto
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Types
+import org.unq.epers.grupo5.rentauto.entities.Usuario
 
 class UsuarioHome extends HomeDb<Usuario, String> {
 
