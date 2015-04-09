@@ -16,7 +16,7 @@ class DatabaseTest {
 		val connection = this.getConnection("")
 		val statement = connection.createStatement
 
-		statement.executeUpdate(command)
+		statement.execute(command)
 
 		statement.close
 		connection.close
