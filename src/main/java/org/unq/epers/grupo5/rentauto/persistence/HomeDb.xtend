@@ -21,8 +21,6 @@ abstract class HomeDb<T> implements Home<T> {
 	
 	abstract def T rsToEntity(ResultSet rs)
 	
-	abstract override findBy(String conditions)
-	
 	override getById(int id) 
 	{
 		var PreparedStatement stmt = conn.prepareStatement("SELECT " + colunmsStr + " FROM " + tableName + " WHERE " + pkName + " = ?")

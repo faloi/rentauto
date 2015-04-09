@@ -6,15 +6,9 @@ import java.sql.Types
 import org.unq.epers.grupo5.rentauto.entities.Usuario
 
 class UsuarioHome extends HomeDb<Usuario> {
-
 	new(Database db) {
 		super(db, "usuario")
 	}
-
-	override findBy(String conditions) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-	
 
 	override rsToEntity(ResultSet rs) 
 	{	
