@@ -11,8 +11,8 @@ class Usuario {
 	var String passwd
 	var String email
 	var Date nacimiento
-	var String cod_verif
-	var boolean validado
+	var String codigo_validacion
+	var boolean is_validado
 
 
 	new(String nombre, String apellido, String username, String passwd, String email, Date nacimiento, String cod_verif, boolean validado) 

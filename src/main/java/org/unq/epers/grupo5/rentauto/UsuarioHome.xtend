@@ -23,14 +23,17 @@ class UsuarioHome extends HomeDb<Usuario, String> {
 						rs.getString("passwd"), 
 						rs.getString("email"), 
 						rs.getDate("nacimiento"), 
-						rs.getString("cod_verif"), 
-						rs.getBoolean("validado")	)
+						rs.getString("codigo_validacion"), 
+						rs.getBoolean("is_validado")	)
 	}
 	
 	override insert(Usuario objeto) {
+		
+		var String valoresStr = columns.keySet.filter[ it != pkName ].map [ [ | return "?" ] ].join(",")
+		
 		var PreparedStatement stmt = conn.prepareStatement("
-			INSERT INTO usuario (nombre, apellido, username, passwd, email, nacimiento, cod_verif, validado)
-				VALUES  (?,?,?,?,?,?,?,?) ")
+			INSERT INTO " + tableName + " (" + columns + ")
+				VALUES  (" + valoresStr + ") ")
 
 		stmt.setString(1,objeto.nombre)
 		stmt.setString(2,objeto.apellido)
@@ -45,9 +48,11 @@ class UsuarioHome extends HomeDb<Usuario, String> {
 	}
 	
 	override update(Usuario objeto) {
+		
+		var String valoresStr = columns.keySet.filter[ it != pkName ].map [ [ | return "?" ] ].join(",")
+		
 		var PreparedStatement stmt = conn.prepareStatement("
-			INSERT INTO usuario (nombre, apellido, username, passwd, email, nacimiento, cod_verif, validado)
-				VALUES  (?,?,?,?,?,?,?,?) ")
+			UPDATE " + colunmsStr + )
 
 		stmt.setString(1,objeto.nombre)
 		stmt.setString(2,objeto.apellido)
@@ -61,10 +66,11 @@ class UsuarioHome extends HomeDb<Usuario, String> {
 		stmt.execute
 		stmt.close
 		
+
 		
 	}
 	
-	override colunms() {
+	override columns() {
 		#{ 	"nombre" 	-> Types.VARCHAR, 
 			"apellido" 	-> Types.VARCHAR, 
 			"username" 	-> Types.VARCHAR, 

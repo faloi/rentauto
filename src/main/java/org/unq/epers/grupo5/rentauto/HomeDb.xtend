@@ -32,7 +32,7 @@ abstract class HomeDb<T,E> implements IHome<T,E> {
 		var PreparedStatement stmt = conn.prepareStatement("SELECT " + colunmsStr + " FROM " + tableName + " WHERE " + pkName + " = ?")
 		var ResultSet rs
 	
-		stmt.setObject(1, pk, colunms.get(pkName))
+		stmt.setObject(1, pk, columns.get(pkName))
 		rs  = stmt.executeQuery();
 
 		stmt.close
@@ -43,10 +43,10 @@ abstract class HomeDb<T,E> implements IHome<T,E> {
 		rsToEntity(rs)
 	}
 	
-	abstract def Map<String, Integer> colunms()
+	abstract def Map<String, Integer> columns()
 	
 	def String colunmsStr() {		
-		colunms.keySet.join(",")
+		columns.keySet.join(",")
 	}
 
 	abstract override insert(T objeto)
