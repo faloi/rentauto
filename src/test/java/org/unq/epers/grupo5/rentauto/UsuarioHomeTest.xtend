@@ -6,6 +6,7 @@ import java.sql.Date
 import org.junit.Before
 import org.junit.Test
 import org.unq.epers.grupo5.rentauto.entities.Usuario
+import org.unq.epers.grupo5.rentauto.exceptions.UsuarioYaExisteException
 import org.unq.epers.grupo5.rentauto.persistence.UsuarioHome
 
 import static org.junit.Assert.*
@@ -22,7 +23,7 @@ class UsuarioHomeTest extends DatabaseTest {
 	
 	@Test
 	def void insertAgregaUnNuevoUsuario() {
-		val usuario =  new Usuario() => [
+		home.insert(new Usuario() => [
 			nombre = "Miguel"
 			apellido = "Del Sel"
 			username = "miguelds"
@@ -30,9 +31,7 @@ class UsuarioHomeTest extends DatabaseTest {
 			email = "miguelds@pro.gov.ar"
 			nacimiento = new Date(1957,7,3)
 			codigo_validacion = "1234567890"
-		]
-		
-		home.insert(usuario)
+		])
 				
 		val usuarioDesdeSql = home.getById(1)
 		assertEquals(usuarioDesdeSql.id, 1)
@@ -43,5 +42,16 @@ class UsuarioHomeTest extends DatabaseTest {
 		assertEquals(usuarioDesdeSql.email, "miguelds@pro.gov.ar")	
 		assertEquals(usuarioDesdeSql.nacimiento, new Date(1957, 7, 3))
 		assertEquals(usuarioDesdeSql.codigo_validacion, "1234567890")
+	}
+	
+	@Test(expected = UsuarioYaExisteException)
+	def void noSePuedenCrearDosUsuariosConElMismoUsername() {
+		val macri = new Usuario() => [ 
+			username = "mm2015" 
+			password = "cerremosUnaEscuela"
+		]
+		
+		home.insert(macri)
+		home.insert(macri)
 	}
 }

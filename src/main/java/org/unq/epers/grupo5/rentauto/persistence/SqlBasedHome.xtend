@@ -6,8 +6,12 @@ import java.sql.ResultSet
 import java.util.List
 import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
 import org.unq.epers.grupo5.rentauto.entities.Entity
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
+import org.unq.epers.grupo5.rentauto.exceptions.UsuarioYaExisteException
 
 abstract class SqlBasedHome<TEntity extends Entity> {
+	static val UNIQUE_KEY_VIOLATION_CODE = 1062
+	
 	protected val Connection connection
 	protected val String tableName
 
@@ -52,12 +56,19 @@ abstract class SqlBasedHome<TEntity extends Entity> {
 	}
 
 	def executeStatement(TEntity entity, String query) {
-		val statement = connection.prepareStatement(query)
-
-		setColumnas(statement, entity)
-
-		statement.execute
-		statement.close
+		try {
+			val statement = connection.prepareStatement(query)
+	
+			setColumnas(statement, entity)
+	
+			statement.execute
+			statement.close		
+		} catch (MySQLIntegrityConstraintViolationException e) {  
+			if (e.errorCode == UNIQUE_KEY_VIOLATION_CODE)
+				throw new UsuarioYaExisteException(e)			
+			else 
+				throw e
+		}
 	}
 
 	abstract def void setColumnas(PreparedStatement stmt, TEntity entity)
