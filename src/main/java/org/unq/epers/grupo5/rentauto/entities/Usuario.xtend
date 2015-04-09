@@ -5,6 +5,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 @Accessors 
 class Usuario {
+	var int id
 	var String nombre
 	var String apellido
 	var String username
@@ -14,9 +15,9 @@ class Usuario {
 	var String codigo_validacion
 	var boolean is_validado
 
-
-	new(String nombre, String apellido, String username, String passwd, String email, Date nacimiento, String cod_verif, boolean validado) 
+	new(int id, String nombre, String apellido, String username, String passwd, String email, Date nacimiento, String cod_verif, boolean validado) 
 	{
+		this.id = id
 		this.nombre = nombre 
 		this.apellido = apellido
 		this.username = username 
