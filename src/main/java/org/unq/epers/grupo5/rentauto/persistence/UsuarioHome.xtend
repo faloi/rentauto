@@ -10,7 +10,7 @@ class UsuarioHome extends HomeDb<Usuario> {
 		super(db, "usuario")
 	}
 
-	override rsToEntity(ResultSet rs) 
+	override resultSetToEntity(ResultSet rs) 
 	{	
 		new Usuario(	rs.getInt("id"),
 						rs.getString("nombre"),
@@ -24,32 +24,29 @@ class UsuarioHome extends HomeDb<Usuario> {
 	}
 	
 	override insert(Usuario objeto) {
-		var String valoresStr = columns.keySet.filter[ it != pkName ].map [ [ | return "?" ] ].join(",")
-		
-		var PreparedStatement stmt = conn.prepareStatement('''INSERT INTO «tableName» («columns») VALUES  («valoresStr»)''')
-
-		setColumnas(stmt, objeto)
-
-		stmt.execute
-		stmt.close
+		val valuesPlaceholder = columns.keySet.filter [ it != pkName ].map [ "?" ].join(",")
+		executeStatement(objeto, '''INSERT INTO «tableName» («columns») VALUES («valuesPlaceholder»)''')
 	}
 	
 	override update(Usuario objeto) {
-		var String valoresStr = columns.keySet.filter[ it != pkName ].map [ [ | return "?" ] ].join(",")
-		
-		var PreparedStatement stmt = conn.prepareStatement('''UPDATE «valoresStr» WHERE id=«objeto.id»''')
+		val valuesPlaceholder = columns.keySet.filter [ it != pkName ].map [ '''«it» = ?''' ].join(",")
+		executeStatement(objeto, '''UPDATE «tableName» SET «valuesPlaceholder» WHERE «pkName»=«objeto.id»''')
+	}
+	
+	def executeStatement(Usuario entity, String query) {
+		val statement = connection.prepareStatement(query)
 
-		setColumnas(stmt, objeto)
+		setColumnas(statement, entity)
 
-		stmt.execute
-		stmt.close
+		statement.execute
+		statement.close		
 	}
 	
 	def setColumnas(PreparedStatement stmt, Usuario entity) {
 		stmt.setString(1, entity.nombre)
 		stmt.setString(2, entity.apellido)
 		stmt.setString(3, entity.username)
-		stmt.setString(4, entity.passwd)
+		stmt.setString(4, entity.getPassword)
 		stmt.setString(5, entity.email)
 		stmt.setObject(6, entity.nacimiento, Types.DATE)
 		stmt.setString(7, entity.codigo_validacion)

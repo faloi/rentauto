@@ -7,46 +7,40 @@ import java.util.Map
 import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
 
 abstract class HomeDb<T> implements Home<T> {
-	
-	var Connection conn
+	protected val Connection connection
 	protected val String tableName
 	 
 	new(Database db, String tableName) {
 		this.tableName = tableName
-		this.conn = db.getConnection()
+		this.connection = db.getConnection()
 	}
 	
-	def getConn() { this.conn }
 	def getPkName () { "id" }
 	
-	abstract def T rsToEntity(ResultSet rs)
+	abstract def T resultSetToEntity(ResultSet rs)
 	
 	override getById(int id) 
 	{
-		var PreparedStatement stmt = conn.prepareStatement("SELECT " + colunmsStr + " FROM " + tableName + " WHERE " + pkName + " = ?")
-		var ResultSet rs
-	
-		stmt.setObject(1, id, columns.get(pkName))
-		rs  = stmt.executeQuery();
+		val statement = connection.prepareStatement('''SELECT «columnsStr» FROM «tableName» WHERE «pkName» = ?''')
+		statement.setObject(1, id, columns.get(pkName))
+		
+		val resultSet = statement.executeQuery();
 
-		stmt.close
+		statement.close
 
-		if ( ! rs.next )	
+		if (!resultSet.next)	
 			throw new EntidadNoExisteException()
 
-		rsToEntity(rs)
+		resultSetToEntity(resultSet)
 	}
 	
 	abstract def Map<String, Integer> columns()
 	
-	def String colunmsStr() {		
+	def String columnsStr() {		
 		columns.keySet.join(",")
 	}
 
 	abstract override insert(T objeto)
 	
 	abstract override update(T objeto) 
-	
-	
-	
 }
