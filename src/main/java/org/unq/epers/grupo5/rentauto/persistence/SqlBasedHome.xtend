@@ -7,7 +7,7 @@ import java.util.List
 import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
 import org.unq.epers.grupo5.rentauto.entities.Entity
 
-abstract class HomeDb<TEntity extends Entity> implements Home<TEntity> {
+abstract class SqlBasedHome<TEntity extends Entity> {
 	protected val Connection connection
 	protected val String tableName
 
@@ -20,7 +20,7 @@ abstract class HomeDb<TEntity extends Entity> implements Home<TEntity> {
 
 	abstract def TEntity resultSetToEntity(ResultSet rs)
 
-	override getById(Integer id) {
+	def getById(Integer id) {
 		findBy('''«pkName» = «id»''')
 	}
 
@@ -40,13 +40,13 @@ abstract class HomeDb<TEntity extends Entity> implements Home<TEntity> {
 
 	abstract def List<String> columns()
 
-	override insert(TEntity objeto) {
+	def insert(TEntity objeto) {
 		var columnsStr = columns.filter[it != pkName].join(",")
 		val valuesPlaceholder = columns.filter[it != pkName].map["?"].join(",")
 		executeStatement(objeto, '''INSERT INTO «tableName» («columnsStr») VALUES («valuesPlaceholder»)''')
 	}
 
-	override update(TEntity objeto) {
+	def update(TEntity objeto) {
 		val valuesPlaceholder = columns.filter[it != pkName].map['''«it» = ?'''].join(",")
 		executeStatement(objeto, '''UPDATE «tableName» SET «valuesPlaceholder» WHERE «pkName»=«objeto.id»''')
 	}

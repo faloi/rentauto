@@ -4,7 +4,7 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import org.unq.epers.grupo5.rentauto.entities.Usuario
 
-class UsuarioHome extends HomeDb<Usuario> {
+class UsuarioHome extends SqlBasedHome<Usuario> {
 	new() {
 		super(new Database("tpepers"), "usuario")
 	}
