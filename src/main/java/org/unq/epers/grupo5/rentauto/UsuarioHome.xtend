@@ -1,8 +1,8 @@
 package org.unq.epers.grupo5.rentauto
 
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Types
-import java.sql.PreparedStatement
 
 class UsuarioHome extends HomeDb<Usuario, String> {
 
@@ -41,8 +41,8 @@ class UsuarioHome extends HomeDb<Usuario, String> {
 		stmt.setString(4,objeto.passwd)
 		stmt.setString(5,objeto.email)
 		stmt.setObject(6,objeto.nacimiento, Types.DATE)
-		stmt.setString(7,objeto.cod_verif)
-		stmt.setBoolean(8,objeto.validado)
+		stmt.setString(7,objeto.codigo_validacion)
+		stmt.setBoolean(8,objeto.is_validado)
 
 		stmt.execute()
 	}
@@ -52,7 +52,7 @@ class UsuarioHome extends HomeDb<Usuario, String> {
 		var String valoresStr = columns.keySet.filter[ it != pkName ].map [ [ | return "?" ] ].join(",")
 		
 		var PreparedStatement stmt = conn.prepareStatement("
-			UPDATE " + colunmsStr + )
+			UPDATE " + colunmsStr)
 
 		stmt.setString(1,objeto.nombre)
 		stmt.setString(2,objeto.apellido)
