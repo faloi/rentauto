@@ -22,10 +22,15 @@ class UsuarioHomeTest extends DatabaseTest {
 	
 	@Test
 	def void insertAgregaUnNuevoUsuario() {
-		val usuario = new Usuario(
-			1, "Miguel", "Del Sel", "miguelds", "dameLaPresidencia", 
-			"miguelds@pro.gov.ar", new Date(1957,7,3), "1234567890", true
-		)
+		val usuario =  new Usuario() => [
+			nombre = "Miguel"
+			apellido = "Del Sel"
+			username = "miguelds"
+			password = "dameLaPresidencia"
+			email = "miguelds@pro.gov.ar"
+			nacimiento = new Date(1957,7,3)
+			codigo_validacion = "1234567890"
+		]
 		
 		home.insert(usuario)
 				
@@ -38,6 +43,5 @@ class UsuarioHomeTest extends DatabaseTest {
 		assertEquals(usuarioDesdeSql.email, "miguelds@pro.gov.ar")	
 		assertEquals(usuarioDesdeSql.nacimiento, new Date(1957, 7, 3))
 		assertEquals(usuarioDesdeSql.codigo_validacion, "1234567890")
-		assertEquals(usuarioDesdeSql.is_validado, true)
 	}
 }
