@@ -10,6 +10,7 @@ import org.unq.epers.grupo5.rentauto.exceptions.UsuarioYaExisteException
 import org.unq.epers.grupo5.rentauto.persistence.UsuarioHome
 
 import static org.junit.Assert.*
+import org.unq.epers.grupo5.rentauto.exceptions.EntidadNoExisteException
 
 class UsuarioHomeTest extends DatabaseTest {
 	static val SCHEMA_PATH = "src/main/resources/tp1.sql"
@@ -32,6 +33,11 @@ class UsuarioHomeTest extends DatabaseTest {
 			codigo_validacion = "1234567890"
 		]
 	}	
+	
+	@Test(expected = EntidadNoExisteException)
+	def void getByIdFallaSiNoExisteElUsuario() {
+		home.getById(28)
+	}
 	
 	@Test
 	def void insertAgregaUnNuevoUsuario() {
