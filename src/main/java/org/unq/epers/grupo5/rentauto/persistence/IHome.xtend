@@ -1,4 +1,4 @@
-package org.unq.epers.grupo5.rentauto
+package org.unq.epers.grupo5.rentauto.persistence
 
 import java.util.List
 
