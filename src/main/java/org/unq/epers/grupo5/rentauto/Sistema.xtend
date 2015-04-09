@@ -8,7 +8,7 @@ import org.unq.epers.grupo5.rentauto.persistence.Database
 import org.unq.epers.grupo5.rentauto.persistence.UsuarioHome
 
 class Sistema {
-	val home = new UsuarioHome(new Database("usuario"))
+	val home = new UsuarioHome()
 	
 	def void registrar(Usuario usuario) {
 		home.insert(usuario)

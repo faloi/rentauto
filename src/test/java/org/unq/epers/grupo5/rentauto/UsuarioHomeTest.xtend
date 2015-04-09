@@ -6,7 +6,6 @@ import java.sql.Date
 import org.junit.Before
 import org.junit.Test
 import org.unq.epers.grupo5.rentauto.entities.Usuario
-import org.unq.epers.grupo5.rentauto.persistence.Database
 import org.unq.epers.grupo5.rentauto.persistence.UsuarioHome
 
 import static org.junit.Assert.*
@@ -22,12 +21,10 @@ class UsuarioHomeTest extends DatabaseTest {
 	
 	@Test
 	def void testInsert() {
-		
 		var usuario = new Usuario(1, "Miguel", "Del Sel", "miguelds", "dameLaPresidencia", "miguelds@pro.gov.ar", new Date(1957,7,3), "123467890", true)
-		var home = new UsuarioHome( new Database("tpepers") )
+		var home = new UsuarioHome()
 		
 		home.insert(usuario)
 		assertEquals(usuario, home.getById(1))
-		
 	}
 }

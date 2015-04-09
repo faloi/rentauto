@@ -5,8 +5,8 @@ import java.sql.ResultSet
 import org.unq.epers.grupo5.rentauto.entities.Usuario
 
 class UsuarioHome extends HomeDb<Usuario> {
-	new(Database db) {
-		super(db, "usuario")
+	new() {
+		super(new Database("tpepers"), "usuario")
 	}
 
 	override resultSetToEntity(ResultSet rs) 
