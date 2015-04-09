@@ -13,17 +13,16 @@ import static org.junit.Assert.*
 
 class UsuarioHomeTest extends DatabaseTest {
 	static val SCHEMA_PATH = "src/main/resources/tp1.sql"
+	
 	val home = new UsuarioHome()
+	var Usuario miguelDelSel
 	
 	@Before
 	def void setUp() {
-		val schemaDdlCommands = new String(Files.readAllBytes(Paths.get(SCHEMA_PATH))).split(";").filter[it != "\n" && it != "\r"]
-		schemaDdlCommands.forEach [ executeCommand(it) ]
-	}
-	
-	@Test
-	def void insertAgregaUnNuevoUsuario() {
-		home.insert(new Usuario() => [
+		dropAndCreateDatabase()
+		
+		miguelDelSel = new Usuario() => [
+			id = 1
 			nombre = "Miguel"
 			apellido = "Del Sel"
 			username = "miguelds"
@@ -31,17 +30,22 @@ class UsuarioHomeTest extends DatabaseTest {
 			email = "miguelds@pro.gov.ar"
 			nacimiento = new Date(1957,7,3)
 			codigo_validacion = "1234567890"
-		])
+		]
+	}	
+	
+	@Test
+	def void insertAgregaUnNuevoUsuario() {
+		home.insert(miguelDelSel)
 				
 		val usuarioDesdeSql = home.getById(1)
-		assertEquals(usuarioDesdeSql.id, 1)
-		assertEquals(usuarioDesdeSql.nombre, "Miguel")
-		assertEquals(usuarioDesdeSql.apellido, "Del Sel")
-		assertEquals(usuarioDesdeSql.username, "miguelds")
-		assertEquals(usuarioDesdeSql.password, "dameLaPresidencia")
-		assertEquals(usuarioDesdeSql.email, "miguelds@pro.gov.ar")	
-		assertEquals(usuarioDesdeSql.nacimiento, new Date(1957, 7, 3))
-		assertEquals(usuarioDesdeSql.codigo_validacion, "1234567890")
+		assertEquals(1, usuarioDesdeSql.id)
+		assertEquals("Miguel", usuarioDesdeSql.nombre)
+		assertEquals("Del Sel", usuarioDesdeSql.apellido)
+		assertEquals("miguelds", usuarioDesdeSql.username)
+		assertEquals("dameLaPresidencia", usuarioDesdeSql.password)
+		assertEquals("miguelds@pro.gov.ar", usuarioDesdeSql.email)	
+		assertEquals(new Date(1957, 7, 3), usuarioDesdeSql.nacimiento)
+		assertEquals("1234567890", usuarioDesdeSql.codigo_validacion)
 	}
 	
 	@Test(expected = UsuarioYaExisteException)
@@ -54,4 +58,29 @@ class UsuarioHomeTest extends DatabaseTest {
 		home.insert(macri)
 		home.insert(macri)
 	}
+	
+	@Test
+	def void updateActualizaTodasLasPropiedadesDelObjeto() {
+		home.insert(miguelDelSel)
+		
+		miguelDelSel.password = "yoTraigoLasChicas"
+		miguelDelSel.apellido = "Torres Del Sel"
+		
+		home.update(miguelDelSel)
+		
+		val usuarioDesdeSql = home.getById(1)
+		assertEquals(1, usuarioDesdeSql.id)
+		assertEquals("Miguel", usuarioDesdeSql.nombre)
+		assertEquals("Torres Del Sel", usuarioDesdeSql.apellido)
+		assertEquals("miguelds", usuarioDesdeSql.username)
+		assertEquals("yoTraigoLasChicas", usuarioDesdeSql.password)
+		assertEquals("miguelds@pro.gov.ar", usuarioDesdeSql.email)	
+		assertEquals(new Date(1957, 7, 3), usuarioDesdeSql.nacimiento)
+		assertEquals("1234567890", usuarioDesdeSql.codigo_validacion)
+	}
+	
+	def dropAndCreateDatabase() {
+		val schemaDdlCommands = new String(Files.readAllBytes(Paths.get(SCHEMA_PATH))).split(";").filter[it != "\n" && it != "\r"]
+		schemaDdlCommands.forEach [ executeCommand(it) ]
+	}	
 }
