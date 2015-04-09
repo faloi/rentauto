@@ -25,7 +25,7 @@ class UsuarioHome extends HomeDb<Usuario> {
 	
 	override insert(Usuario objeto) {
 		val valuesPlaceholder = columns.keySet.filter [ it != pkName ].map [ "?" ].join(",")
-		executeStatement(objeto, '''INSERT INTO «tableName» («columns») VALUES («valuesPlaceholder»)''')
+		executeStatement(objeto, '''INSERT INTO «tableName» («columnsStr») VALUES («valuesPlaceholder»)''')
 	}
 	
 	override update(Usuario objeto) {

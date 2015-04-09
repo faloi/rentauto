@@ -37,7 +37,7 @@ abstract class HomeDb<T> implements Home<T> {
 	abstract def Map<String, Integer> columns()
 	
 	def String columnsStr() {		
-		columns.keySet.join(",")
+		columns.keySet.filter[it!=pkName].join(",")
 	}
 
 	abstract override insert(T objeto)
