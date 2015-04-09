@@ -36,7 +36,7 @@ class UsuarioHome extends SqlBasedHome<Usuario> {
 	}
 
 	def findByUsername(String username) {
-		findBy('''username = «username»''')
+		findBy('''username = '«username»' ''')
 	}
 
 	override columns() {

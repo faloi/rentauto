@@ -85,6 +85,21 @@ class UsuarioHomeTest extends DatabaseTest {
 		assertEquals("1234567890", usuarioDesdeSql.codigo_validacion)
 	}
 	
+	@Test
+	def void findByUsernamePuedeTraerUnUsuario() {
+		home.insert(miguelDelSel)
+		home.insert(new Usuario() => [ username = "mm2015" ; password = "123456" ])
+		
+		val macri = home.findByUsername("mm2015")
+		assertEquals("mm2015", macri.username)
+		assertEquals("123456", macri.password)
+	}
+	
+	@Test(expected = EntidadNoExisteException)
+	def void findByUsernameFallaSiNoExisteNingunUsuario() {
+		home.findByUsername("faloi")
+	}	
+	
 	def dropAndCreateDatabase() {
 		val schemaDdlCommands = new String(Files.readAllBytes(Paths.get(SCHEMA_PATH))).split(";").filter[it != "\n" && it != "\r"]
 		schemaDdlCommands.forEach [ executeCommand(it) ]
