@@ -53,20 +53,4 @@ class UsuarioHome extends HomeDb<Usuario> {
 		]
 
 	}
-
-// obsoleto por ahora
-//	
-//	override columnTypes() {
-//		#{ 	
-//			"id"		-> Types.INTEGER,
-//			"nombre" 	-> Types.VARCHAR, 
-//			"apellido" 	-> Types.VARCHAR, 
-//			"username" 	-> Types.VARCHAR, 
-//			"password"  -> Types.VARCHAR, 
-//			"email" 	-> Types.VARCHAR, 
-//			"nacimiento"-> Types.DATE, 
-//			"codigo_validacion" -> Types.VARCHAR, 
-//			"is_validado" 	-> Types.BOOLEAN
-//		}
-//	}
 }
