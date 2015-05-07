@@ -16,7 +16,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 abstract class Categoria {
 	@Id
 	@GeneratedValue
-	private long id
+	long id
 	
 	String nombre
 	

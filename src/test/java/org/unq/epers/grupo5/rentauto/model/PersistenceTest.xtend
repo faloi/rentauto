@@ -4,6 +4,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+import static org.junit.Assert.*
 import static org.unq.epers.grupo5.rentauto.dbutils.EntityManagerHelper.*
 
 class PersistenceTest {
@@ -18,7 +19,10 @@ class PersistenceTest {
 	}
 
 	@Test
-	def void testName() {
-		entityManager.persist(new Familiar)
+	def void puedenPersistirseYRecuperarseCategorias() {
+		val familiar = new Familiar
+		entityManager.persist(familiar)
+		
+		assertEquals(familiar, entityManager.find(Familiar, familiar.id))
 	}
 }
