@@ -63,3 +63,4 @@ release.properties
 
 #####=== Application ===#####
 db.properties
+schema.sql
