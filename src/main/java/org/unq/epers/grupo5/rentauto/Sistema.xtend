@@ -1,10 +1,9 @@
 package org.unq.epers.grupo5.rentauto
 
-import org.unq.epers.grupo5.rentauto.entities.Usuario
 import org.unq.epers.grupo5.rentauto.exceptions.LoginIncorrectoException
 import org.unq.epers.grupo5.rentauto.exceptions.NuevaPasswordInvalidaException
 import org.unq.epers.grupo5.rentauto.exceptions.ValidacionException
-import org.unq.epers.grupo5.rentauto.persistence.Database
+import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.unq.epers.grupo5.rentauto.persistence.UsuarioHome
 
 class Sistema {

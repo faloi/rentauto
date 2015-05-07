@@ -2,7 +2,7 @@ package org.unq.epers.grupo5.rentauto.persistence
 
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-import org.unq.epers.grupo5.rentauto.entities.Usuario
+import org.unq.epers.grupo5.rentauto.model.Usuario
 
 class UsuarioHome extends SqlBasedHome<Usuario> {
 	new() {
@@ -30,7 +30,6 @@ class UsuarioHome extends SqlBasedHome<Usuario> {
 		stmt.setString(3, entity.username)
 		stmt.setString(4, entity.password)
 		stmt.setString(5, entity.email)
-		stmt.setDate(6, entity.nacimiento)
 		stmt.setString(7, entity.codigo_validacion)
 		stmt.setBoolean(8, entity.is_validado)
 	}
