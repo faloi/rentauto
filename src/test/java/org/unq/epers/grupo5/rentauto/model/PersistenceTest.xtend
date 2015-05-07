@@ -53,4 +53,33 @@ class PersistenceTest {
 		
 		assertEquals(reserva, entityManager.find(Reserva, reserva.id))
 	}	
+	
+	@Test
+	def void puedenPersistirseYRecuperarseEmpresas() {
+		val faloi = new Usuario => [ nombre = "Federico" ; apellido = "Aloi" ]
+		val todoTerreno = new TodoTerreno
+		
+		val monotributista = new Empresa => [
+			cuit = "20365286001"
+			nombreEmpresa = "Federico Aloi"
+			cantidadMaximaDeReservasActivas = 8
+			valorMaximoPorDia = 2000d
+		
+			usuarios = #[faloi]
+			categoriasAdmitidas = #[new Familiar, todoTerreno]
+		]
+		
+		val boedo = new Ubicacion("boedo")
+		
+		new ReservaEmpresarial => [ 
+			auto = new Auto("Toyota", "Hilux", 2015, "OOP123", todoTerreno, 500000d, boedo)
+			usuario = faloi ; origen = boedo
+			empresa = monotributista ; nombreContacto = "Fede" ; cargoContacto = "Dueño"
+			reservar()
+		]
+		
+		entityManager.persist(monotributista)
+		
+		assertEquals(monotributista, entityManager.find(Empresa, monotributista.id))		
+	} 
 }

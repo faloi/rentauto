@@ -13,9 +13,9 @@ class Empresa extends Entidad {
 	int cantidadMaximaDeReservasActivas
 	Double valorMaximoPorDia
 		
-	@OneToMany List<Usuario> usuarios = newArrayList
-	@OneToMany List<Reserva> reservas = newArrayList
-	@OneToMany List<Categoria> categoriasAdmitidas = newArrayList
+	@OneToMany(cascade = ALL) List<Usuario> usuarios = newArrayList
+	@OneToMany(cascade = ALL) List<Reserva> reservas = newArrayList
+	@OneToMany(cascade = ALL) List<Categoria> categoriasAdmitidas = newArrayList
 	
 	def agregarReserva(Reserva unaReserva){
 		unaReserva.validarReserva

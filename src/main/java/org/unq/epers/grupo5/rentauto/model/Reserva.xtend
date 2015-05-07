@@ -56,7 +56,7 @@ class Reserva extends Entidad {
 		return 0
 	}
 	
-	def reservar(){
+	def void reservar(){
 		this.auto.agregarReserva(this)
 		this.usuario.agregarReserva(this)
 	}
