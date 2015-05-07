@@ -1,19 +1,21 @@
 package org.unq.epers.grupo5.rentauto.model
 
 import java.util.List
+import javax.persistence.Entity
+import javax.persistence.OneToMany
 import org.eclipse.xtend.lib.annotations.Accessors
 
+@Entity
 @Accessors 
-class Empresa {
+class Empresa extends Entidad {
 	String cuit
 	String nombreEmpresa
-	
-	List<IUsuario> usuarios = newArrayList
-	List<Reserva> reservas = newArrayList
-
 	int cantidadMaximaDeReservasActivas
 	Double valorMaximoPorDia
-	List<Categoria> categoriasAdmitidas = newArrayList
+		
+	@OneToMany List<Usuario> usuarios = newArrayList
+	@OneToMany List<Reserva> reservas = newArrayList
+	@OneToMany List<Categoria> categoriasAdmitidas = newArrayList
 	
 	def agregarReserva(Reserva unaReserva){
 		unaReserva.validarReserva

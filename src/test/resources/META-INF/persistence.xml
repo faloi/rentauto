@@ -14,6 +14,10 @@
 		<class>org.unq.epers.grupo5.rentauto.model.Familiar</class>
 		<class>org.unq.epers.grupo5.rentauto.model.Deportivo</class>
 		<class>org.unq.epers.grupo5.rentauto.model.TodoTerreno</class>
+		<class>org.unq.epers.grupo5.rentauto.model.Reserva</class>
+		<class>org.unq.epers.grupo5.rentauto.model.Auto</class>
+		<class>org.unq.epers.grupo5.rentauto.model.Ubicacion</class>
+		<class>org.unq.epers.grupo5.rentauto.model.Usuario</class>
 
 		<properties>
 			<property name="hibernate.archive.autodetection" value="class" />

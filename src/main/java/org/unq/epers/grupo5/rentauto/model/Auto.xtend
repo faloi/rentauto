@@ -2,20 +2,25 @@ package org.unq.epers.grupo5.rentauto.model
 
 import java.util.Date
 import java.util.List
+import javax.persistence.Entity
+import javax.persistence.OneToMany
+import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
 
+@Entity
 @Accessors
-class Auto {
+class Auto extends Entidad {
 	String marca
 	String modelo
 	Integer año
 	String patente
 	Double costoBase
-	Categoria categoria
+	
+	@OneToOne Categoria categoria
+	@OneToOne Ubicacion ubicacionInicial
 	
 	//Debe estar ordenado
-	List<Reserva> reservas = newArrayList()
-	Ubicacion ubicacionInicial
+	@OneToMany List<Reserva> reservas = newArrayList()
 
 	new(String marca, String modelo, Integer anio, String patente, Categoria categoria, Double costoBase, Ubicacion ubicacionInicial){
 		this.marca = marca

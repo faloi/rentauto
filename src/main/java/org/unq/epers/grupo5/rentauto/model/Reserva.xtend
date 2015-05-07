@@ -1,21 +1,26 @@
 package org.unq.epers.grupo5.rentauto.model
 
 import java.util.Date
+import javax.persistence.Entity
+import javax.persistence.ManyToOne
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.joda.time.DateTime
 import org.joda.time.Days
 
 import static ar.edu.unq.epers.extensions.DateExtensions.*
+import javax.persistence.OneToOne
 
+@Entity
 @Accessors
-class Reserva {
+class Reserva extends Entidad {
 	Integer numeroSolicitud
-	Ubicacion origen
-	Ubicacion destino
 	Date inicio
 	Date fin
-	Auto auto
-	IUsuario usuario
+		
+	@OneToOne Ubicacion origen	
+	@OneToOne Ubicacion destino
+	@ManyToOne Auto auto
+	@ManyToOne Usuario usuario
 
 	def costo() {
 		val cantidadDeDias = Days.daysBetween(new DateTime(inicio), new DateTime(fin)).days
@@ -60,7 +65,7 @@ class Reserva {
 
 @Accessors 
 class ReservaEmpresarial extends Reserva{
-	Empresa empresa
+	@ManyToOne Empresa empresa
 	String nombreContacto
 	String cargoContacto
 	
