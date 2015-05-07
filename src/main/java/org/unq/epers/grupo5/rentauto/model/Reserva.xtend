@@ -17,10 +17,10 @@ class Reserva extends Entidad {
 	Date inicio
 	Date fin
 		
-	@OneToOne Ubicacion origen	
-	@OneToOne Ubicacion destino
-	@ManyToOne Auto auto
-	@ManyToOne Usuario usuario
+	@OneToOne(cascade = ALL) Ubicacion origen	
+	@OneToOne(cascade = ALL) Ubicacion destino
+	@ManyToOne(cascade = ALL) Auto auto
+	@ManyToOne(cascade = ALL) Usuario usuario
 
 	def costo() {
 		val cantidadDeDias = Days.daysBetween(new DateTime(inicio), new DateTime(fin)).days

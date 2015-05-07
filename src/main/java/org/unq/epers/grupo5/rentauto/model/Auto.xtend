@@ -16,11 +16,11 @@ class Auto extends Entidad {
 	String patente
 	Double costoBase
 	
-	@OneToOne Categoria categoria
-	@OneToOne Ubicacion ubicacionInicial
+	@OneToOne(cascade = ALL) Categoria categoria
+	@OneToOne(cascade = ALL) Ubicacion ubicacionInicial
 	
 	//Debe estar ordenado
-	@OneToMany List<Reserva> reservas = newArrayList()
+	@OneToMany(cascade = ALL) List<Reserva> reservas = newArrayList()
 
 	new(String marca, String modelo, Integer anio, String patente, Categoria categoria, Double costoBase, Ubicacion ubicacionInicial){
 		this.marca = marca

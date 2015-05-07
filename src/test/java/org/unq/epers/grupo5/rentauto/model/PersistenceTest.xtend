@@ -16,7 +16,7 @@ class PersistenceTest {
 
 	@After
 	def void after() {
-		rollback()
+		commit()
 	}
 
 	@Test
