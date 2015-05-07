@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.model
+package org.unq.epers.grupo5.rentauto.model
 
 import org.junit.Before
 import static org.mockito.Mockito.*

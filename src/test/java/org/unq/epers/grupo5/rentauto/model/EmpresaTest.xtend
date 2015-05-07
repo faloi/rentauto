@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.model
+package org.unq.epers.grupo5.rentauto.model
 
 import org.junit.Test
 import static ar.edu.unq.epers.extensions.DateExtensions.*
