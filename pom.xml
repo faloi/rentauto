@@ -8,7 +8,7 @@
 	<name>xtend-quickstart</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<xtend.version>2.8.0</xtend.version>
+		<xtend.version>2.8.1</xtend.version>
 	</properties>
 	<build>
 		<plugins>
