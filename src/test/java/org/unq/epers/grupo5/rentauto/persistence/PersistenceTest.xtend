@@ -1,8 +1,16 @@
-package org.unq.epers.grupo5.rentauto.model
+package org.unq.epers.grupo5.rentauto.persistence
 
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.unq.epers.grupo5.rentauto.model.Auto
+import org.unq.epers.grupo5.rentauto.model.Empresa
+import org.unq.epers.grupo5.rentauto.model.Familiar
+import org.unq.epers.grupo5.rentauto.model.Reserva
+import org.unq.epers.grupo5.rentauto.model.ReservaEmpresarial
+import org.unq.epers.grupo5.rentauto.model.TodoTerreno
+import org.unq.epers.grupo5.rentauto.model.Ubicacion
+import org.unq.epers.grupo5.rentauto.model.Usuario
 
 import static ar.edu.unq.epers.extensions.DateExtensions.*
 import static org.junit.Assert.*
