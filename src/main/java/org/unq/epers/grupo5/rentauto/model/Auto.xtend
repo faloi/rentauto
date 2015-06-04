@@ -22,6 +22,8 @@ class Auto extends Entidad {
 	//Debe estar ordenado
 	@OneToMany(cascade = ALL) List<Reserva> reservas = newArrayList()
 
+	new() {}
+
 	new(String marca, String modelo, Integer anio, String patente, Categoria categoria, Double costoBase, Ubicacion ubicacionInicial){
 		this.marca = marca
 		this.modelo = modelo

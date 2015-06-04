@@ -10,6 +10,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class Ubicacion extends Entidad {
 	String nombre
 	
+	new() {}
+	
 	new(String nombre){
 		this.nombre = nombre
 	}
