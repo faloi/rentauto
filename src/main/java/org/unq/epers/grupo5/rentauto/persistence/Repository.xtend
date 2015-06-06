@@ -1,6 +1,7 @@
 package org.unq.epers.grupo5.rentauto.persistence
 
 import java.util.Date
+import javax.persistence.Query
 import org.eclipse.xtend.lib.annotations.Data
 import org.unq.epers.grupo5.rentauto.model.Auto
 import org.unq.epers.grupo5.rentauto.model.Categoria
@@ -33,11 +34,20 @@ class Repository implements WithGlobalEntityManager, EntityManagerOps {
 				and r.fin = :fin
 				and a.categoria = :categoria 
 		''', Auto)
-		.setParameter("origen", example.origen)
-		.setParameter("destino", example.destino)
-		.setParameter("inicio", example.inicio)
-		.setParameter("fin", example.fin)
-		.setParameter("categoria", example.categoria)
+		.setParametersFromExample(example)
 		.resultList
+	}
+	
+	static def <T extends Query> setParametersFromExample(T query, Object example) {
+		example.class.declaredFields
+			.map[name -> example.getPropertyValue(name)]
+			.forEach[query.setParameter(key, value)]
+			
+		query
+	}
+	
+	static def getPropertyValue(Object object, String propertyName) {
+		val getter = object.class.getMethod('''get«propertyName.toFirstUpper»''')
+		getter.invoke(object)
 	}
 }
