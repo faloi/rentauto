@@ -4,6 +4,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.unq.epers.grupo5.rentauto.model.Auto
+import org.unq.epers.grupo5.rentauto.model.Categoria
 import org.unq.epers.grupo5.rentauto.model.Familiar
 import org.unq.epers.grupo5.rentauto.model.Reserva
 import org.unq.epers.grupo5.rentauto.model.TodoTerreno
@@ -19,28 +20,29 @@ import static extension org.junit.Assert.*
 
 class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, TransactionalOps {
 	Repository repository
+	Auto gol
+	Auto hilux
+	Ubicacion flores
+	Ubicacion boedo
+	Ubicacion marDelPlata
+	Categoria todoTerreno
 	
 	@Before
 	def void setUp() {
-		repository = new Repository()
 		beginTransaction()
-	}
+		
+		repository = new Repository()
+		
+		flores = new Ubicacion("Flores")
+		gol = new Auto("Volkswagen", "Gol", 2006, "FPK437", new Familiar, 75000d, flores)
 
-	@After
-	def void tearDown() {
-		rollbackTransaction()
-	}
-	
-	@Test
-	def void autosDisponiblesEnUbicacionEnDia() {
-		val flores = new Ubicacion("Flores")
-		val gol = new Auto("Volkswagen", "Gol", 2006, "FPK437", new Familiar, 75000d, flores)
-
-		val reserva = new Reserva => [
+		marDelPlata = new Ubicacion("Mar del Plata")
+		
+		val reservaGol = new Reserva => [
 			numeroSolicitud = 999
 			auto = gol
 			origen = flores
-			destino = new Ubicacion("Mar del Plata")
+			destino = marDelPlata
 			inicio = nuevaFecha(2015, 10, 29)
 			fin = nuevaFecha(2015, 10, 31)
 			usuario = new Usuario => [
@@ -54,13 +56,55 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 			]
 		]
 		
-		gol.agregarReserva(reserva)
-		persist(reserva)
+		gol.agregarReserva(reservaGol)
+		persist(reservaGol)		
 		
-		val hilux = new Auto("Toyota", "Hilux", 2015, "OOP123", new TodoTerreno, 500000d, new Ubicacion("Boedo"))
-		persist(hilux)
+		boedo = new Ubicacion("Boedo")
+		todoTerreno = new TodoTerreno
+		hilux = new Auto("Toyota", "Hilux", 2015, "OOP123", todoTerreno, 500000d, boedo)
+
+		val reservaHilux = new Reserva => [
+			numeroSolicitud = 888
+			auto = hilux
+			origen = boedo
+			destino = marDelPlata
+			inicio = nuevaFecha(2015, 10, 29)
+			fin = nuevaFecha(2015, 10, 31)
+			usuario = new Usuario => [
+				nombre = "Miguel"
+				apellido = "Del Sel"
+				username = "miguelds"
+				password = "dameLaPresidencia"
+				email = "miguelds@pro.gov.ar"
+				nacimiento = nuevaFecha(1957, 7, 3)
+				codigo_validacion = "1234567890"				
+			]
+		]		
 		
+		persist(reservaHilux)
+	}
+
+	@After
+	def void tearDown() {
+		rollbackTransaction()
+	}
+	
+	@Test
+	def void autosDisponiblesEnUbicacionEnDia() {
 		gol.assertEquals(repository.autosDisponibles(flores, nuevaFecha(2015, 10, 29)).head)
 		assertTrue(repository.autosDisponibles(flores, nuevaFecha(2015, 11, 29)).empty)
+	}
+	
+	@Test
+	def void autosConReservas() {
+		val reservaExample = new ReservaExample(
+			nuevaFecha(2015, 10, 29), 
+			nuevaFecha(2015, 10, 31),
+			boedo,
+			marDelPlata,
+			todoTerreno
+		)
+		
+		#[hilux].assertEquals(repository.autosConReservas(reservaExample))
 	}
 }
