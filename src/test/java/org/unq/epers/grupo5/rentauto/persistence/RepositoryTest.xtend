@@ -95,6 +95,11 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 	}
 	
 	@Test
+	def void autosDisponiblesEnUbicacionAntesDeLaPrimeraReserva() {
+		#[gol].assertEquals(repository.autosDisponibles(flores, nuevaFecha(2015, 10, 28)))
+	}
+	
+	@Test
 	def void unAutoSinReservasTomaLaUbicacionInicialComoActual() {
 		val devoto = new Ubicacion("Devoto")
 		val scenic = new Auto("Renault", "Scenic", 2007, "FTS381", new Familiar, 105000d, devoto)
