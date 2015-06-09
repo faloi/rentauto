@@ -27,13 +27,17 @@ class Repository implements WithGlobalEntityManager, EntityManagerOps {
 			where 
 				r is null and a.ubicacionInicial = :ubicacion
 			or
-				r.fin <= :dia and 
 				r.destino = :ubicacion and 
+				r.fin <= :dia and 
 				r.fin = (select max(r1.fin) from Reserva as r1 where r1.auto = a)
 			or
-				r.inicio >= :dia and 
-				r.origen = :ubicacion and 
-				r.inicio = (select min(r1.inicio) from Reserva as r1 where r1.auto = a)				
+				r.origen = :ubicacion and
+				r.inicio >= :dia and 				
+				r.inicio = (select min(r1.inicio) from Reserva as r1 where r1.auto = a)
+			or
+				r.destino = :ubicacion and
+				r.fin < :dia and
+				exists (from Reserva as r2 where r2.auto = a and r != r2 and r2.inicio > :dia)
 		''', Auto)
 		.setParameter("ubicacion", ubicacion)
 		.setParameter("dia", dia)

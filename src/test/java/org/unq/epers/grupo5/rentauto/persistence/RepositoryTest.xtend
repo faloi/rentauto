@@ -100,6 +100,32 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 	}
 	
 	@Test
+	def void autosDisponiblesEnUbicacionEntreReservas() {
+		val reservaGol = new Reserva => [
+			numeroSolicitud = 999
+			auto = gol
+			origen = marDelPlata
+			destino = boedo
+			inicio = nuevaFecha(2015, 11, 3)
+			fin = nuevaFecha(2015, 11, 8)
+			usuario = new Usuario => [
+				nombre = "Miguel"
+				apellido = "Del Sel"
+				username = "miguelds"
+				password = "dameLaPresidencia"
+				email = "miguelds@pro.gov.ar"
+				nacimiento = nuevaFecha(1957, 7, 3)
+				codigo_validacion = "1234567890"				
+			]
+		]
+		
+		gol.agregarReserva(reservaGol)
+		persist(reservaGol)		
+		
+		#[gol].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 2)))
+	}	
+	
+	@Test
 	def void unAutoSinReservasTomaLaUbicacionInicialComoActual() {
 		val devoto = new Ubicacion("Devoto")
 		val scenic = new Auto("Renault", "Scenic", 2007, "FTS381", new Familiar, 105000d, devoto)
