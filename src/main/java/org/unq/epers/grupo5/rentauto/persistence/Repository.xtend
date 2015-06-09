@@ -24,9 +24,17 @@ class Repository implements WithGlobalEntityManager, EntityManagerOps {
 			select a
 			from Auto as a
 			left join a.reservas as r 
-			where r is null and a.ubicacionInicial = :ubicacion
+			where 
+				(r is null and a.ubicacionInicial = :ubicacion)
+				or
+				(
+					r.fin <= :dia and 
+					r.destino = :ubicacion and 
+					r.fin = (select max(r1.fin) from Reserva as r1 where r1.auto = a)
+				)
 		''', Auto)
 		.setParameter("ubicacion", ubicacion)
+		.setParameter("dia", dia)
 		.resultList
 	}
 	

@@ -90,29 +90,8 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 	}
 	
 	@Test
-	def void autosDisponiblesEnUbicacionEnDia() {
-		val reserva = new Reserva => [
-			numeroSolicitud = 999
-			auto = gol
-			origen = marDelPlata
-			destino = new Ubicacion("Sarandi")
-			inicio = nuevaFecha(2015, 10, 31)
-			fin = nuevaFecha(2015, 11, 7)
-			usuario = new Usuario => [
-				nombre = "Miguel"
-				apellido = "Del Sel"
-				username = "miguelds"
-				password = "dameLaPresidencia"
-				email = "miguelds@pro.gov.ar"
-				nacimiento = nuevaFecha(1957, 7, 3)
-				codigo_validacion = "1234567890"				
-			]
-		]
-		
-		persist(reserva)
-		
-		gol.assertEquals(repository.autosDisponibles(flores, nuevaFecha(2015, 10, 29)).head)
-		assertTrue(repository.autosDisponibles(flores, nuevaFecha(2015, 11, 29)).empty)
+	def void autosDisponiblesEnUbicacionEnDiaPosteriorALaUltimaDevolucion() {
+		#[gol].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
 	}
 	
 	@Test
