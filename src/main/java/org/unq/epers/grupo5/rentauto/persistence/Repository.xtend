@@ -44,16 +44,26 @@ class Repository implements WithGlobalEntityManager, EntityManagerOps {
 		.resultList
 	}
 	
-	def autosConReservas(ReservaExample example) {
+	def autosReservables(ReservaExample example) {
 		createQuery('''
-			select a 
-			from Reserva as r 
-			join r.auto as a
-			where r.destino = :destino
-				and r.origen = :origen
-				and r.inicio = :inicio
-				and r.fin = :fin
-				and a.categoria = :categoria 
+			select a
+			from Auto as a
+			left join a.reservas as r 
+			where a.categoria = :categoria and ( 
+				r is null and a.ubicacionInicial = :origen
+			or
+				r.destino = :origen and 
+				r.fin <= :inicio and 
+				r.fin = (select max(r1.fin) from Reserva as r1 where r1.auto = a)
+			or
+				r.origen = :destino and
+				r.inicio >= :fin and 				
+				r.inicio = (select min(r1.inicio) from Reserva as r1 where r1.auto = a)
+			or
+				r.destino = :origen and
+				r.fin < :inicio and
+				exists (from Reserva as r2 where r2.auto = a and r != r2 and r2.inicio > :fin)
+			)
 		''', Auto)
 		.setParametersFromExample(example)
 		.resultList

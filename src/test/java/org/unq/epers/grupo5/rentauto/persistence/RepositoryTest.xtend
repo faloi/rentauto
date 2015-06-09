@@ -81,6 +81,7 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 			]
 		]		
 		
+		hilux.agregarReserva(reservaHilux)
 		persist(reservaHilux)
 	}
 
@@ -91,7 +92,7 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 	
 	@Test
 	def void autosDisponiblesEnUbicacionEnDiaPosteriorALaUltimaDevolucion() {
-		#[gol].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
 	}
 	
 	@Test
@@ -101,13 +102,16 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 	
 	@Test
 	def void autosDisponiblesEnUbicacionEntreReservas() {
+		val sanMartin = new Ubicacion("San Martin")
+		persist(sanMartin)
+		
 		val reservaGol = new Reserva => [
 			numeroSolicitud = 999
 			auto = gol
-			origen = marDelPlata
-			destino = boedo
-			inicio = nuevaFecha(2015, 11, 3)
-			fin = nuevaFecha(2015, 11, 8)
+			origen = flores
+			destino = sanMartin
+			inicio = nuevaFecha(2015, 10, 25)
+			fin = nuevaFecha(2015, 10, 26)
 			usuario = new Usuario => [
 				nombre = "Miguel"
 				apellido = "Del Sel"
@@ -122,7 +126,7 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 		gol.agregarReserva(reservaGol)
 		persist(reservaGol)		
 		
-		#[gol].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 2)))
+		#[gol].assertEquals(repository.autosDisponibles(sanMartin, nuevaFecha(2015, 10, 27)))
 	}	
 	
 	@Test
@@ -136,15 +140,18 @@ class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, Trans
 	}
 	
 	@Test
-	def void autosConReservas() {
+	def void autosReservables() {
+		val gesell = new Ubicacion("Villa Gesell")
+		persist(gesell)
+		
 		val reservaExample = new ReservaExample(
-			nuevaFecha(2015, 10, 29), 
-			nuevaFecha(2015, 10, 31),
-			boedo,
+			nuevaFecha(2015, 11, 1), 
+			nuevaFecha(2015, 11, 9),
 			marDelPlata,
+			gesell,
 			todoTerreno
 		)
 		
-		#[hilux].assertEquals(repository.autosConReservas(reservaExample))
+		#[hilux].assertEquals(repository.autosReservables(reservaExample))
 	}
 }
