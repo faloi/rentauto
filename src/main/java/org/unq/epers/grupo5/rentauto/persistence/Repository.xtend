@@ -19,8 +19,15 @@ class ReservaExample {
 }
 
 class Repository implements WithGlobalEntityManager, EntityManagerOps {
-	def autosDisponibles(Ubicacion ubicacion, Date date) {
-		createQuery("from Auto", Auto).resultList.filter[ubicacionParaDia(date).nombre == ubicacion.nombre]
+	def autosDisponibles(Ubicacion ubicacion, Date dia) {
+		createQuery('''
+			select a
+			from Auto as a
+			left join a.reservas as r 
+			where r is null and a.ubicacionInicial = :ubicacion
+		''', Auto)
+		.setParameter("ubicacion", ubicacion)
+		.resultList
 	}
 	
 	def autosConReservas(ReservaExample example) {
