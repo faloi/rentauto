@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.unq.epers.grupo5.rentauto.persistence.amigos.AmigosService
+import org.unq.epers.grupo5.rentauto.persistence.amigos.NoSePuedeEnviarMensajeException
 import org.uqbarproject.jpa.java8.extras.EntityManagerOps
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager
 import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps
@@ -50,7 +51,12 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 	@Test
 	def void sePuedenConsultarConexiones() {		
 		assertEquals(#[diego, marian, juli, laChina], service.conexionesDe(fede))
-	}	
+	}
+	
+	@Test(expected=NoSePuedeEnviarMensajeException)
+	def void noSePuedenDejarMensajesAUsuariosNoAmigos() {
+		service.enviarMensaje(fede, marian, "ola ke ase")
+	}
 	
 	def crearUsuario() {
 		val usuario = new Usuario
