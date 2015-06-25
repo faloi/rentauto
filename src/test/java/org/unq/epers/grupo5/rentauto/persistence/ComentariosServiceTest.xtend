@@ -41,11 +41,7 @@ class ComentariosServiceTest extends BasePersistenceTest {
 	
 	@Test
 	def void puedenRecuperarseComentariosPorId() {
-		val comentarioDesdeMongo = service.get(comentarioPabloFiat.id)
-		assertEquals(Calificacion.MALO, comentarioDesdeMongo.calificacion)
-		assertEquals("La proxima voy en carreta", comentarioDesdeMongo.observaciones)
-		assertEquals(Visibilidad.PUBLICO, comentarioDesdeMongo.visibilidad)
-		assertEquals(fiat600, comentarioDesdeMongo.auto)
+		assertEquals(comentarioPabloFiat, service.get(comentarioPabloFiat.id))
 	}
 	
 	def <T> create(T entity) {

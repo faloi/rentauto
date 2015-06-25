@@ -3,8 +3,12 @@ package org.unq.epers.grupo5.rentauto.model
 import net.vz.mongodb.jackson.ObjectId
 import org.codehaus.jackson.annotate.JsonProperty
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.EqualsHashCode
+import org.eclipse.xtend.lib.annotations.ToString
 
 @Accessors
+@EqualsHashCode
+@ToString
 class Comentario {
 	@ObjectId
 	@JsonProperty("_id")
