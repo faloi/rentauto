@@ -21,16 +21,16 @@ class ComentariosService implements WithGlobalEntityManager, EntityManagerOps {
 	}
 	
 	def get(String id) {
-		val comentario = home.mongoCollection.findOneById(id)
+		val comentario = home.findOneById(id)
 		cargarDatosDeSQL(comentario)
 	}
 	
 	def dropAll() {
-		home.mongoCollection.drop
+		home.drop
 	}
 	
 	def verPerfilSegun(Usuario target, Usuario interesado) {
-		home.mongoCollection
+		home
 		.find(
 			DBQuery.is("autor._id", target.id)
 			.and(DBQuery.in("visibilidad", visibilidadesPara(target, interesado)))

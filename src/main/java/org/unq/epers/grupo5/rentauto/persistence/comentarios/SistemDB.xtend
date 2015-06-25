@@ -27,9 +27,9 @@ class SistemDB {
 	}
 	
 	
-	def <T> Collection<T> collection(Class<T> entityType){
-		val dbCollection = db.getCollection(entityType.getSimpleName());
-		new Collection<T>(JacksonDBCollection.wrap(dbCollection, entityType, String));
+	def <T> collection(Class<T> entityType){
+		val dbCollection = db.getCollection(entityType.getSimpleName())
+		JacksonDBCollection.wrap(dbCollection, entityType, String)
 	}
 
 }
