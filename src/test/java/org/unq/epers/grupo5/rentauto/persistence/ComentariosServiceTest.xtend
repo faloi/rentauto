@@ -1,0 +1,55 @@
+package org.unq.epers.grupo5.rentauto.persistence
+
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import org.unq.epers.grupo5.rentauto.model.Auto
+import org.unq.epers.grupo5.rentauto.model.Calificacion
+import org.unq.epers.grupo5.rentauto.model.Comentario
+import org.unq.epers.grupo5.rentauto.model.Usuario
+import org.unq.epers.grupo5.rentauto.model.Visibilidad
+import org.unq.epers.grupo5.rentauto.persistence.comentarios.ComentariosService
+
+import static org.junit.Assert.*
+
+class ComentariosServiceTest extends BasePersistenceTest {
+	Usuario pablo
+	Auto fiat600
+	
+	ComentariosService service
+	
+	Comentario comentarioPabloFiat
+	
+	@Before
+	def void setUp() {
+		beginTransaction()
+		
+		service = new ComentariosService
+		
+		pablo = create(new Usuario)
+		fiat600 = create(new Auto)
+		
+		comentarioPabloFiat = new Comentario(fiat600, Calificacion.MALO, "La proxima voy en carreta", Visibilidad.PUBLICO)
+		service.crear(comentarioPabloFiat)
+	}
+	
+	@After
+	def void tearDown() {
+		rollbackTransaction()
+		service.dropAll()
+	}
+	
+	@Test
+	def void puedenRecuperarseComentariosPorId() {
+		val comentarioDesdeMongo = service.get(comentarioPabloFiat.id)
+		assertEquals(Calificacion.MALO, comentarioDesdeMongo.calificacion)
+		assertEquals("La proxima voy en carreta", comentarioDesdeMongo.observaciones)
+		assertEquals(Visibilidad.PUBLICO, comentarioDesdeMongo.visibilidad)
+		assertEquals(fiat600, comentarioDesdeMongo.auto)
+	}
+	
+	def <T> create(T entity) {
+		persist(entity)
+		entity
+	}	
+}
