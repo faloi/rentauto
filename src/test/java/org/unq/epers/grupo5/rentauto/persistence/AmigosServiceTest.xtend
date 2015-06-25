@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.unq.epers.grupo5.rentauto.persistence.amigos.AmigosService
+import org.unq.epers.grupo5.rentauto.persistence.amigos.Mensaje
 import org.unq.epers.grupo5.rentauto.persistence.amigos.NoSePuedeEnviarMensajeException
 import org.uqbarproject.jpa.java8.extras.EntityManagerOps
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager
@@ -36,6 +37,10 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 		service.amigosDe(juli, #[fede, laChina])
 		service.amigosDe(fede, #[diego])
 		service.amigosDe(diego, #[marian])
+		
+		service.enviarMensaje(juli, laChina, "hola")
+		service.enviarMensaje(fede, juli, "sale un te?")
+		service.enviarMensaje(fede, diego, "estas en Lanus?")
 	}
 
 	@After
@@ -56,6 +61,12 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 	@Test(expected=NoSePuedeEnviarMensajeException)
 	def void noSePuedenDejarMensajesAUsuariosNoAmigos() {
 		service.enviarMensaje(fede, marian, "ola ke ase")
+	}
+
+	@Test
+	def void sePuedenConsultarMensajesEnviados() {		
+		val enviados = #[new Mensaje(fede, diego, "estas en Lanus?"), new Mensaje(fede, juli, "sale un te?")]
+		assertEquals(enviados, service.mensajesEnviadosPor(fede))
 	}
 	
 	def crearUsuario() {

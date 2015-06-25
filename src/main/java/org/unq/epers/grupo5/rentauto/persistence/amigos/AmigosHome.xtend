@@ -1,12 +1,12 @@
 package org.unq.epers.grupo5.rentauto.persistence.amigos
 
+import java.util.Map
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.neo4j.graphdb.Direction
-import org.neo4j.graphdb.DynamicLabel
 import org.neo4j.graphdb.GraphDatabaseService
+import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.RelationshipType
-import org.neo4j.kernel.Traversal
 import org.unq.epers.grupo5.rentauto.exceptions.BusinessException
 import org.unq.epers.grupo5.rentauto.model.Usuario
 
@@ -18,36 +18,42 @@ class AmigosHome {
 		this.graph = graph
 	}
 
-	def amigoLabel() {
-		DynamicLabel.label("Amigo")
-	}
-
 	def crearNodo(Usuario amigo) {
-		validate(amigo)		
-		graph.createNode(amigoLabel).setProperty("id", amigo.id)
+		validate(amigo)
+		crearNodo(Etiquetas.AMIGO, newHashMap("id" -> amigo.id))
 	}
 
 	def amigosDe(Usuario amigo) {
-		nodosRelacionados(getNodo(amigo), TipoDeRelaciones.AMIGO, Direction.BOTH)
+		nodosRelacionados(getNodo(amigo), TipoDeRelaciones.ES_AMIGO, Direction.BOTH)
 	}
 	
 	def conexionesDe(Usuario amigo) {
 		val nodo = getNodo(amigo)
 		
 		graph.traversalDescription
-			.relationships(TipoDeRelaciones.AMIGO)
+			.relationships(TipoDeRelaciones.ES_AMIGO)
 			.traverse(nodo)
 			.nodes
 			.filter[it != nodo]
 	}
 
 	def amigoDe(Usuario amigo, Usuario amigo2) {
-		getNodo(amigo).createRelationshipTo(getNodo(amigo2), TipoDeRelaciones.AMIGO)
+		getNodo(amigo).crearRelacion(amigo2, TipoDeRelaciones.ES_AMIGO)
+	}
+	
+	def enviarMensaje(Mensaje mensaje) {
+		crearNodo(Etiquetas.MENSAJE, newHashMap("mensaje" -> mensaje.mensaje))
+			.crearRelacion(mensaje.emisor, TipoDeRelaciones.ENVIADO_POR)
+			.crearRelacion(mensaje.receptor, TipoDeRelaciones.RECIBIDO_POR)
+	}
+	
+	def mensajesEnviadosPor(Usuario amigo) {
+		nodosRelacionados(getNodo(amigo), TipoDeRelaciones.ENVIADO_POR, Direction.INCOMING)
 	}
 	
 	private def getNodo(Usuario amigo) {
-		validate(amigo)		
-		graph.findNodes(amigoLabel, "id", amigo.id).head
+		validate(amigo)
+		graph.findNodes(Etiquetas.AMIGO, "id", amigo.id).head
 	}
 	
 	private def validate(Usuario amigo) {
@@ -57,5 +63,17 @@ class AmigosHome {
 
 	private def nodosRelacionados(Node nodo, RelationshipType tipo, Direction direccion) {
 		nodo.getRelationships(tipo, direccion).map[it.getOtherNode(nodo)]
-	}	
+	}
+	
+	private def crearNodo(Etiquetas label, Map<String, Object> properties) {
+		val nodo = graph.createNode(label)
+		properties.forEach[key, value | nodo.setProperty(key, value)]
+		
+		nodo
+	}
+	
+	private def crearRelacion(Node node, Usuario amigo, TipoDeRelaciones relacion) {
+		node.createRelationshipTo(getNodo(amigo), relacion)
+		node
+	}
 }
