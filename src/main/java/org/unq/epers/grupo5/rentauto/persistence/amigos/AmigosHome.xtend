@@ -48,7 +48,15 @@ class AmigosHome {
 	}
 	
 	def mensajesEnviadosPor(Usuario amigo) {
-		nodosRelacionados(getNodo(amigo), TipoDeRelaciones.ENVIADO_POR, Direction.INCOMING)
+		mensajesDe(amigo, TipoDeRelaciones.ENVIADO_POR)
+	}
+	
+	def mensajesRecibidosPor(Usuario amigo) {
+		mensajesDe(amigo, TipoDeRelaciones.RECIBIDO_POR)
+	}
+	
+	private def mensajesDe(Usuario amigo, TipoDeRelaciones tipo) {
+		nodosRelacionados(getNodo(amigo), tipo, Direction.INCOMING)
 	}
 	
 	private def getNodo(Usuario amigo) {

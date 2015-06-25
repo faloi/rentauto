@@ -52,16 +52,24 @@ class AmigosService implements WithGlobalEntityManager, EntityManagerOps {
 		Neo4JService.run[ home(it).mensajesEnviadosPor(usuario).toMensajes ]
 	}	
 	
+	def mensajesRecibidosPor(Usuario usuario) {
+		Neo4JService.run[ home(it).mensajesRecibidosPor(usuario).toMensajes ]
+	}	
+	
 	private def nodeToAmigo(Node node) {
 		find(Usuario, node.getProperty("id"))
 	}
 	
 	private def nodeToMensaje(Node node) {
-		new Mensaje(
-			nodeToAmigo(node.getSingleRelationship(TipoDeRelaciones.ENVIADO_POR, Direction.OUTGOING).endNode),
-			nodeToAmigo(node.getSingleRelationship(TipoDeRelaciones.RECIBIDO_POR, Direction.OUTGOING).endNode),
+		new Mensaje(			
+			getParticipanteMensaje(node, TipoDeRelaciones.ENVIADO_POR),
+			getParticipanteMensaje(node, TipoDeRelaciones.RECIBIDO_POR),
 			node.getProperty("mensaje") as String
 		)
+	}
+	
+	private def getParticipanteMensaje(Node node, TipoDeRelaciones relacion) {
+		nodeToAmigo(node.getSingleRelationship(relacion, Direction.OUTGOING).endNode)
 	}
 	
 	private def toAmigos(Iterable<Node> nodes) {

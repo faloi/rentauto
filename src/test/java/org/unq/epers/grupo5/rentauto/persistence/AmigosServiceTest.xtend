@@ -38,7 +38,7 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 		service.amigosDe(fede, #[diego])
 		service.amigosDe(diego, #[marian])
 		
-		service.enviarMensaje(juli, laChina, "hola")
+		service.enviarMensaje(laChina, juli, "hola")
 		service.enviarMensaje(fede, juli, "sale un te?")
 		service.enviarMensaje(fede, diego, "estas en Lanus?")
 	}
@@ -68,6 +68,12 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 		val enviados = #[new Mensaje(fede, diego, "estas en Lanus?"), new Mensaje(fede, juli, "sale un te?")]
 		assertEquals(enviados, service.mensajesEnviadosPor(fede))
 	}
+	
+	@Test
+	def void sePuedenConsultarMensajesRecibidos() {		
+		val enviados = #[new Mensaje(fede, juli, "sale un te?"), new Mensaje(laChina, juli, "hola")]
+		assertEquals(enviados, service.mensajesRecibidosPor(juli))
+	}	
 	
 	def crearUsuario() {
 		val usuario = new Usuario
