@@ -1,14 +1,17 @@
 package org.unq.epers.grupo5.rentauto.persistence.comentarios
 
+import net.vz.mongodb.jackson.DBQuery
 import org.unq.epers.grupo5.rentauto.model.Auto
 import org.unq.epers.grupo5.rentauto.model.Comentario
 import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.unq.epers.grupo5.rentauto.model.Visibilidad
+import org.unq.epers.grupo5.rentauto.persistence.amigos.AmigosService
 import org.uqbarproject.jpa.java8.extras.EntityManagerOps
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager
 
 class ComentariosService implements WithGlobalEntityManager, EntityManagerOps {
-	def home() { SistemDB.instance().collection(Comentario) }
+	val home = SistemDB.instance().collection(Comentario)
+	val amigosService = new AmigosService
 	
 	def crear(Comentario... comentarios) {
 		comentarios.forEach[ 
@@ -27,10 +30,19 @@ class ComentariosService implements WithGlobalEntityManager, EntityManagerOps {
 	}
 	
 	def verPerfilSegun(Usuario target, Usuario interesado) {
-		home.mongoCollection
+		comentariosSegun(target, interesado)
+		.toArray
+		.map[cargarDatosDeSQL]
+	}
+	
+	private def comentariosSegun(Usuario target, Usuario interesado) {
+		if (amigosService.esAmigoDe(target, interesado)) {
+			home.mongoCollection
+			.find(DBQuery.is("autor._id", target.id).and(DBQuery.in("visibilidad", #[Visibilidad.PUBLICO, Visibilidad.SOLO_AMIGOS])))
+		} else {
+			home.mongoCollection
 			.find(new Comentario() => [ autor = target ; visibilidad = Visibilidad.PUBLICO ])
-			.toArray
-			.map[cargarDatosDeSQL]
+		}
 	}
 
 	private def cargarDatosDeSQL(Comentario comentario) {

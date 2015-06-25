@@ -8,6 +8,7 @@ import org.unq.epers.grupo5.rentauto.model.Calificacion
 import org.unq.epers.grupo5.rentauto.model.Comentario
 import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.unq.epers.grupo5.rentauto.model.Visibilidad
+import org.unq.epers.grupo5.rentauto.persistence.amigos.AmigosService
 import org.unq.epers.grupo5.rentauto.persistence.comentarios.ComentariosService
 
 import static org.junit.Assert.*
@@ -15,7 +16,7 @@ import static org.junit.Assert.*
 class ComentariosServiceTest extends BasePersistenceTest {
 	Usuario pablo
 	
-	ComentariosService service
+	ComentariosService comentariosService
 	
 	Comentario comentarioPabloPrivado
 	Comentario comentarioPabloSoloAmigos
@@ -25,7 +26,7 @@ class ComentariosServiceTest extends BasePersistenceTest {
 	def void setUp() {
 		beginTransaction()
 		
-		service = new ComentariosService
+		comentariosService = new ComentariosService
 		
 		pablo = create(new Usuario)
 		
@@ -40,24 +41,34 @@ class ComentariosServiceTest extends BasePersistenceTest {
 		comentarioPabloPublico = 
 			new Comentario(pablo, toyotaHilux, Calificacion.EXCELENTE, "El unico auto que alquilaria", Visibilidad.PUBLICO)			
 		
-		service.crear(comentarioPabloPrivado, comentarioPabloPublico, comentarioPabloSoloAmigos)
+		comentariosService.crear(comentarioPabloPrivado, comentarioPabloPublico, comentarioPabloSoloAmigos)
 	}
 	
 	@After
 	def void tearDown() {
 		rollbackTransaction()
-		service.dropAll()
+		comentariosService.dropAll()
 	}
 	
 	@Test
 	def void puedenRecuperarseComentariosPorId() {
-		assertEquals(comentarioPabloPrivado, service.get(comentarioPabloPrivado.id))
+		assertEquals(comentarioPabloPrivado, comentariosService.get(comentarioPabloPrivado.id))
 	}
 	
 	@Test
 	def void losDesconocidosSoloVenComentariosPublicos() {
-		assertEquals(#[comentarioPabloPublico] , service.verPerfilSegun(pablo, new Usuario))
+		assertEquals(#[comentarioPabloPublico] , comentariosService.verPerfilSegun(pablo, new Usuario))
 	}
+	
+	@Test
+	def void losAmigosVenComentariosPublicosYParaAmigos() {
+		val amigoDePablo = create(new Usuario)
+		
+		val amigosService = new AmigosService
+		amigosService.amigosDe(pablo, #[amigoDePablo])
+		
+		assertEquals(#[comentarioPabloPublico, comentarioPabloSoloAmigos] , comentariosService.verPerfilSegun(pablo, amigoDePablo))
+	}	
 	
 	def <T> create(T entity) {
 		persist(entity)
