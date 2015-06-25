@@ -3,9 +3,9 @@ package org.unq.epers.grupo5.rentauto.persistence
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.unq.epers.grupo5.rentauto.model.Mensaje
 import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.unq.epers.grupo5.rentauto.persistence.amigos.AmigosService
-import org.unq.epers.grupo5.rentauto.persistence.amigos.Mensaje
 import org.unq.epers.grupo5.rentauto.persistence.amigos.NoSePuedeEnviarMensajeException
 import org.uqbarproject.jpa.java8.extras.EntityManagerOps
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager

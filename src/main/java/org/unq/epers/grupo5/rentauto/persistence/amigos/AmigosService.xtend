@@ -5,6 +5,7 @@ import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Node
 import org.unq.epers.grupo5.rentauto.exceptions.BusinessException
+import org.unq.epers.grupo5.rentauto.model.Mensaje
 import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.uqbarproject.jpa.java8.extras.EntityManagerOps
 import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager

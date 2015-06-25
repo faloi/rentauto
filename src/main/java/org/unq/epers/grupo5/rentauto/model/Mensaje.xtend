@@ -1,4 +1,4 @@
-package org.unq.epers.grupo5.rentauto.persistence.amigos
+package org.unq.epers.grupo5.rentauto.model
 
 import org.eclipse.xtend.lib.annotations.Data
 import org.unq.epers.grupo5.rentauto.model.Usuario

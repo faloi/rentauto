@@ -4,10 +4,10 @@ import java.util.Map
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.GraphDatabaseService
-import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.RelationshipType
 import org.unq.epers.grupo5.rentauto.exceptions.BusinessException
+import org.unq.epers.grupo5.rentauto.model.Mensaje
 import org.unq.epers.grupo5.rentauto.model.Usuario
 
 @Accessors
