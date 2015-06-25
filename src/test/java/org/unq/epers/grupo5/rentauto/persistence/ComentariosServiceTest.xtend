@@ -14,11 +14,12 @@ import static org.junit.Assert.*
 
 class ComentariosServiceTest extends BasePersistenceTest {
 	Usuario pablo
-	Auto fiat600
 	
 	ComentariosService service
 	
-	Comentario comentarioPabloFiat
+	Comentario comentarioPabloPrivado
+	Comentario comentarioPabloSoloAmigos
+	Comentario comentarioPabloPublico
 	
 	@Before
 	def void setUp() {
@@ -27,10 +28,19 @@ class ComentariosServiceTest extends BasePersistenceTest {
 		service = new ComentariosService
 		
 		pablo = create(new Usuario)
-		fiat600 = create(new Auto)
 		
-		comentarioPabloFiat = new Comentario(fiat600, Calificacion.MALO, "La proxima voy en carreta", Visibilidad.PUBLICO)
-		service.crear(comentarioPabloFiat)
+		val fiat600 = create(new Auto)
+		comentarioPabloPrivado = new Comentario(pablo, fiat600, Calificacion.MALO, "La proxima voy en carreta", Visibilidad.PRIVADO)
+		
+		val gol3puertas = create(new Auto)
+		comentarioPabloSoloAmigos = 
+			new Comentario(pablo, gol3puertas, Calificacion.REGULAR, "Para ir de camping zafa", Visibilidad.SOLO_AMIGOS)
+			
+		val toyotaHilux = create(new Auto)
+		comentarioPabloPublico = 
+			new Comentario(pablo, toyotaHilux, Calificacion.EXCELENTE, "El unico auto que alquilaria", Visibilidad.PUBLICO)			
+		
+		service.crear(comentarioPabloPrivado, comentarioPabloPublico, comentarioPabloSoloAmigos)
 	}
 	
 	@After
@@ -41,7 +51,12 @@ class ComentariosServiceTest extends BasePersistenceTest {
 	
 	@Test
 	def void puedenRecuperarseComentariosPorId() {
-		assertEquals(comentarioPabloFiat, service.get(comentarioPabloFiat.id))
+		assertEquals(comentarioPabloPrivado, service.get(comentarioPabloPrivado.id))
+	}
+	
+	@Test
+	def void losDesconocidosSoloVenComentariosPublicos() {
+		assertEquals(#[comentarioPabloPublico] , service.verPerfilSegun(pablo, new Usuario))
 	}
 	
 	def <T> create(T entity) {

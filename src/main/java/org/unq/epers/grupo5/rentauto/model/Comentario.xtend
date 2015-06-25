@@ -16,13 +16,15 @@ class Comentario {
 	
 	new() {}
 	
-	new(Auto auto, Calificacion calificacion, String observaciones, Visibilidad visibilidad) {
+	new(Usuario autor, Auto auto, Calificacion calificacion, String observaciones, Visibilidad visibilidad) {
+		this.autor = autor
 		this.auto = auto
 		this.calificacion = calificacion
 		this.observaciones = observaciones
 		this.visibilidad = visibilidad
 	}
 	
+	Usuario autor
 	Auto auto
 	Calificacion calificacion
 	String observaciones
