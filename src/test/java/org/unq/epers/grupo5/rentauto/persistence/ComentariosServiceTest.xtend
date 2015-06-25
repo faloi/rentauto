@@ -15,6 +15,8 @@ import static org.junit.Assert.*
 
 class ComentariosServiceTest extends BasePersistenceTest {
 	Usuario pablo
+	Usuario ronny
+	Usuario desconocido
 	
 	ComentariosService comentariosService
 	
@@ -29,6 +31,11 @@ class ComentariosServiceTest extends BasePersistenceTest {
 		comentariosService = new ComentariosService
 		
 		pablo = create(new Usuario)
+		ronny = create(new Usuario)
+		desconocido = create(new Usuario)
+		
+		val amigosService = new AmigosService
+		amigosService.amigosDe(pablo, #[ronny])
 		
 		val fiat600 = create(new Auto)
 		comentarioPabloPrivado = new Comentario(pablo, fiat600, Calificacion.MALO, "La proxima voy en carreta", Visibilidad.PRIVADO)
@@ -57,17 +64,12 @@ class ComentariosServiceTest extends BasePersistenceTest {
 	
 	@Test
 	def void losDesconocidosSoloVenComentariosPublicos() {
-		assertEquals(#[comentarioPabloPublico] , comentariosService.verPerfilSegun(pablo, new Usuario))
+		assertEquals(#[comentarioPabloPublico] , comentariosService.verPerfilSegun(pablo, desconocido))
 	}
 	
 	@Test
 	def void losAmigosVenComentariosPublicosYParaAmigos() {
-		val amigoDePablo = create(new Usuario)
-		
-		val amigosService = new AmigosService
-		amigosService.amigosDe(pablo, #[amigoDePablo])
-		
-		assertEquals(#[comentarioPabloPublico, comentarioPabloSoloAmigos] , comentariosService.verPerfilSegun(pablo, amigoDePablo))
+		assertEquals(#[comentarioPabloPublico, comentarioPabloSoloAmigos] , comentariosService.verPerfilSegun(pablo, ronny))
 	}	
 	
 	def <T> create(T entity) {

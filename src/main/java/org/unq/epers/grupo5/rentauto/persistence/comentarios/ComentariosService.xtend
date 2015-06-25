@@ -30,18 +30,20 @@ class ComentariosService implements WithGlobalEntityManager, EntityManagerOps {
 	}
 	
 	def verPerfilSegun(Usuario target, Usuario interesado) {
-		comentariosSegun(target, interesado)
+		home.mongoCollection
+		.find(
+			DBQuery.is("autor._id", target.id)
+			.and(DBQuery.in("visibilidad", visibilidadesPara(target, interesado)))
+		)
 		.toArray
 		.map[cargarDatosDeSQL]
 	}
 	
-	private def comentariosSegun(Usuario target, Usuario interesado) {
+	private def visibilidadesPara(Usuario target, Usuario interesado) {
 		if (amigosService.esAmigoDe(target, interesado)) {
-			home.mongoCollection
-			.find(DBQuery.is("autor._id", target.id).and(DBQuery.in("visibilidad", #[Visibilidad.PUBLICO, Visibilidad.SOLO_AMIGOS])))
+			#[Visibilidad.PUBLICO, Visibilidad.SOLO_AMIGOS]
 		} else {
-			home.mongoCollection
-			.find(new Comentario() => [ autor = target ; visibilidad = Visibilidad.PUBLICO ])
+			#[Visibilidad.PUBLICO]
 		}
 	}
 
