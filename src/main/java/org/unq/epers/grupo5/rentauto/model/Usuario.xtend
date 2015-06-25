@@ -23,4 +23,8 @@ class Usuario extends Entidad {
 	def agregarReserva(Reserva unaReserva) {
 		reservas.add(unaReserva)
 	}
+	
+	override def toString() {
+		id.toString()
+	}
 }

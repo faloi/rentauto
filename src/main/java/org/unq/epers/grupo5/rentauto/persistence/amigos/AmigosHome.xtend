@@ -6,8 +6,9 @@ import org.neo4j.graphdb.DynamicLabel
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.RelationshipType
-import org.unq.epers.grupo5.rentauto.model.Usuario
+import org.neo4j.kernel.Traversal
 import org.unq.epers.grupo5.rentauto.exceptions.BusinessException
+import org.unq.epers.grupo5.rentauto.model.Usuario
 
 @Accessors
 class AmigosHome {
@@ -28,7 +29,16 @@ class AmigosHome {
 
 	def amigosDe(Usuario amigo) {
 		nodosRelacionados(getNodo(amigo), TipoDeRelaciones.AMIGO, Direction.BOTH)
+	}
+	
+	def conexionesDe(Usuario amigo) {
+		val nodo = getNodo(amigo)
 		
+		graph.traversalDescription
+			.relationships(TipoDeRelaciones.AMIGO)
+			.traverse(nodo)
+			.nodes
+			.filter[it != nodo]
 	}
 
 	def amigoDe(Usuario amigo, Usuario amigo2) {

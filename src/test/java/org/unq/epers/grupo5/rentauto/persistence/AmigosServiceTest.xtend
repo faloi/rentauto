@@ -16,6 +16,7 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 	Usuario fede
 	Usuario laChina
 	Usuario diego
+	Usuario marian
 	
 	AmigosService service
 	
@@ -27,11 +28,13 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 		fede = crearUsuario()
 		laChina = crearUsuario()
 		diego = crearUsuario()
+		marian = crearUsuario()
 		
 		service = new AmigosService
 		
 		service.amigosDe(juli, #[fede, laChina])
 		service.amigosDe(fede, #[diego])
+		service.amigosDe(diego, #[marian])
 	}
 
 	@After
@@ -43,6 +46,11 @@ class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, Tr
 	def void sePuedenConsultarAmigos() {		
 		assertEquals(#[diego, juli], service.amigosDe(fede))
 	}
+	
+	@Test
+	def void sePuedenConsultarConexiones() {		
+		assertEquals(#[diego, marian, juli, laChina], service.conexionesDe(fede))
+	}	
 	
 	def crearUsuario() {
 		val usuario = new Usuario

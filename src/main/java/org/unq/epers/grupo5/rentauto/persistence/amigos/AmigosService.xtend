@@ -28,10 +28,18 @@ class AmigosService implements WithGlobalEntityManager, EntityManagerOps {
 	}
 	
 	def amigosDe(Usuario usuario) {
-		Neo4JService.run[ home(it).amigosDe(usuario).map[nodeToAmigo].toList ]		
+		Neo4JService.run[ home(it).amigosDe(usuario).toAmigos ]		
+	}
+
+	def conexionesDe(Usuario usuario) {
+		Neo4JService.run[ home(it).conexionesDe(usuario).toAmigos ]
 	}
 	
-	def Usuario nodeToAmigo(Node node) {
+	private def nodeToAmigo(Node node) {
 		find(Usuario, node.getProperty("id"))
+	}
+	
+	private def toAmigos(Iterable<Node> nodes) {
+		nodes.map[nodeToAmigo].toList
 	}
 }
