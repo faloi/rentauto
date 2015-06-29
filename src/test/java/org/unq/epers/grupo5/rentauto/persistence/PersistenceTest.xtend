@@ -11,14 +11,11 @@ import org.unq.epers.grupo5.rentauto.model.ReservaEmpresarial
 import org.unq.epers.grupo5.rentauto.model.TodoTerreno
 import org.unq.epers.grupo5.rentauto.model.Ubicacion
 import org.unq.epers.grupo5.rentauto.model.Usuario
-import org.uqbarproject.jpa.java8.extras.EntityManagerOps
-import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager
 
 import static ar.edu.unq.epers.extensions.DateExtensions.*
 import static org.junit.Assert.*
-import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps
 
-class PersistenceTest implements WithGlobalEntityManager, EntityManagerOps, TransactionalOps {
+class PersistenceTest extends BasePersistenceTest {
 	@Before
 	def void before() {
 		beginTransaction()
