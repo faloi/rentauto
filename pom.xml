@@ -75,6 +75,16 @@
 			<version>5.1.26</version>
 		</dependency>
 		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>2.3.0-M01</version>
+		</dependency>
+		<dependency>
+			<groupId>org.uqbar-project</groupId>
+			<artifactId>jpa-java8-extras</artifactId>
+			<version>1.0-alpha-1</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
@@ -85,11 +95,6 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.10.19</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.uqbar-project</groupId>
-			<artifactId>jpa-java8-extras</artifactId>
-			<version>1.0-alpha-1</version>
 		</dependency>		
 	</dependencies>
 	<dependencyManagement>

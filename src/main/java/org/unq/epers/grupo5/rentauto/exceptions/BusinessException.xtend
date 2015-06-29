@@ -5,5 +5,9 @@ class BusinessException extends RuntimeException {
 		super(exception)
 	}	
 	
+	new(String reason) {
+		super(reason)
+	}
+	
 	new() {}
 }
