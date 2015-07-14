@@ -38,6 +38,10 @@ class Repository implements WithGlobalEntityManager, EntityManagerOps {
 		.resultList
 	}
 	
+	def clearCache() {
+		cache.clear
+	}
+	
 	private def createQuery(String origen, String destino, String inicio, String fin, List<String> extraConditions) {
 		createQuery('''
 		select a

@@ -85,6 +85,7 @@ class RepositoryTest extends BasePersistenceTest {
 	@After
 	def void tearDown() {
 		rollbackTransaction()
+		repository.clearCache
 	}
 	
 	@Test

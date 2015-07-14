@@ -24,8 +24,12 @@ class RedisCache {
 		jedis.set(makeKey(ubicacion, dia), autos.toRedisValue)		
 	}
 	
+	def clear() {
+		jedis.flushDB
+	}
+	
 	private def String makeKey(Ubicacion ubicacion, Date dia) {
-		'''«ubicacion.id»-«new SimpleDateFormat('yyyy-MM-dd').format(dia)»'''
+		'''«ubicacion.id»/«new SimpleDateFormat('yyyy-MM-dd').format(dia)»'''
 	}
 	
 	private def toAutos(String redisValue) {
