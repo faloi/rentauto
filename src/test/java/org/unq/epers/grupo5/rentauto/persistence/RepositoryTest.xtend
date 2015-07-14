@@ -158,4 +158,14 @@ class RepositoryTest extends BasePersistenceTest {
 		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
 		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
 	}
+	
+	@Test
+	def void laCacheSeLimpiaAlGuardarUnAutoNuevo() {
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+		
+		val scenic = new Auto("Renault", "Scenic", 2007, "FTS381", new Familiar, 105000d, marDelPlata)
+		persist(scenic)
+		
+		#[gol, hilux, scenic].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+	}	
 }

@@ -3,12 +3,15 @@ package org.unq.epers.grupo5.rentauto.model
 import java.util.Date
 import java.util.List
 import javax.persistence.Entity
+import javax.persistence.EntityListeners
 import javax.persistence.OneToMany
 import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.unq.epers.grupo5.rentauto.persistence.CacheListener
 
 @Entity
 @Accessors
+@EntityListeners(CacheListener)
 class Auto extends Entidad {
 	String marca
 	String modelo

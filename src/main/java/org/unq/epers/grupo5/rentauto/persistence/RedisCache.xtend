@@ -38,5 +38,10 @@ class RedisCache {
 	
 	private def toRedisValue(List<Auto> autos) {
 		autos.map [ id.toString ].join(",")
-	}	
+	}
+	
+	def static clearFor(Ubicacion ubicacion) {
+		new RedisCache(null).clear
+	}
+	
 }
