@@ -10,15 +10,12 @@ import org.unq.epers.grupo5.rentauto.model.Reserva
 import org.unq.epers.grupo5.rentauto.model.TodoTerreno
 import org.unq.epers.grupo5.rentauto.model.Ubicacion
 import org.unq.epers.grupo5.rentauto.model.Usuario
-import org.uqbarproject.jpa.java8.extras.EntityManagerOps
-import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager
-import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps
 
 import static ar.edu.unq.epers.extensions.DateExtensions.*
 
 import static extension org.junit.Assert.*
 
-class RepositoryTest implements WithGlobalEntityManager, EntityManagerOps, TransactionalOps {
+class RepositoryTest extends BasePersistenceTest {
 	Repository repository
 	Auto gol
 	Auto hilux

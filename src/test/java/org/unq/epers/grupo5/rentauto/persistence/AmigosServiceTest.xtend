@@ -7,13 +7,10 @@ import org.unq.epers.grupo5.rentauto.model.Mensaje
 import org.unq.epers.grupo5.rentauto.model.Usuario
 import org.unq.epers.grupo5.rentauto.persistence.amigos.AmigosService
 import org.unq.epers.grupo5.rentauto.persistence.amigos.NoSePuedeEnviarMensajeException
-import org.uqbarproject.jpa.java8.extras.EntityManagerOps
-import org.uqbarproject.jpa.java8.extras.WithGlobalEntityManager
-import org.uqbarproject.jpa.java8.extras.transaction.TransactionalOps
 
 import static org.junit.Assert.*
 
-class AmigosServiceTest implements WithGlobalEntityManager, EntityManagerOps, TransactionalOps {
+class AmigosServiceTest extends BasePersistenceTest {
 	Usuario juli
 	Usuario fede
 	Usuario laChina
