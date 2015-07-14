@@ -151,4 +151,10 @@ class RepositoryTest extends BasePersistenceTest {
 		
 		#[hilux].assertEquals(repository.autosReservables(reservaExample))
 	}
+	
+	@Test
+	def void losAutosDisponiblesSeCachean() {
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+	}
 }
