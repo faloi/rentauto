@@ -2,16 +2,19 @@ package org.unq.epers.grupo5.rentauto.model
 
 import java.util.Date
 import javax.persistence.Entity
+import javax.persistence.EntityListeners
 import javax.persistence.ManyToOne
+import javax.persistence.OneToOne
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.joda.time.DateTime
 import org.joda.time.Days
+import org.unq.epers.grupo5.rentauto.persistence.CacheListener
 
 import static ar.edu.unq.epers.extensions.DateExtensions.*
-import javax.persistence.OneToOne
 
 @Entity
 @Accessors
+@EntityListeners(CacheListener)
 class Reserva extends Entidad {
 	Integer numeroSolicitud
 	Date inicio

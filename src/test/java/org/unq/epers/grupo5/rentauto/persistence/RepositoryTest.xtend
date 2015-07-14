@@ -168,4 +168,35 @@ class RepositoryTest extends BasePersistenceTest {
 		
 		#[gol, hilux, scenic].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
 	}	
+	
+	@Test
+	def void laCacheSeLimpiaAlGuardarUnaReservaNueva() {
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+		
+		val sanMartin = new Ubicacion("San Martin")
+		persist(sanMartin)
+		
+		val reservaGol = new Reserva => [
+			numeroSolicitud = 999
+			auto = gol
+			origen = marDelPlata
+			destino = sanMartin
+			inicio = nuevaFecha(2015, 11, 1)
+			fin = nuevaFecha(2015, 11, 25)
+			usuario = new Usuario => [
+				nombre = "Miguel"
+				apellido = "Del Sel"
+				username = "miguelds"
+				password = "dameLaPresidencia"
+				email = "miguelds@pro.gov.ar"
+				nacimiento = nuevaFecha(1957, 7, 3)
+				codigo_validacion = "1234567890"				
+			]
+		]
+		
+		gol.agregarReserva(reservaGol)
+		persist(reservaGol)		
+		
+		#[hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+	}	
 }
