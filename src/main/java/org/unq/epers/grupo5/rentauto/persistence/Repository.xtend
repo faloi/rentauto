@@ -20,11 +20,10 @@ class ReservaExample {
 }
 
 class Repository implements WithGlobalEntityManager, EntityManagerOps {
+	val cache = new RedisCache(this)
+	
 	def autosDisponibles(Ubicacion ubicacion, Date dia) {
-		createQuery("ubicacion", "ubicacion", "dia", "dia", #[])
-		.setParameter("ubicacion", ubicacion)
-		.setParameter("dia", dia)
-		.resultList
+		cache.get(ubicacion, dia).orElseGet [ getFromSQL(ubicacion, dia) ]
 	}
 	
 	def autosReservables(ReservaExample example) {
@@ -33,7 +32,17 @@ class Repository implements WithGlobalEntityManager, EntityManagerOps {
 		.resultList
 	}
 	
-	def createQuery(String origen, String destino, String inicio, String fin, List<String> extraConditions) {
+	def autosById(Iterable<Long> ids) {
+		createQuery("select a from Auto as a where a.id in (:ids)", Auto)
+		.setParameter("ids", ids)
+		.resultList
+	}
+	
+	def clearCache() {
+		cache.clear
+	}
+	
+	private def createQuery(String origen, String destino, String inicio, String fin, List<String> extraConditions) {
 		createQuery('''
 		select a
 		from Auto as a
@@ -54,6 +63,17 @@ class Repository implements WithGlobalEntityManager, EntityManagerOps {
 			exists (from Reserva as r2 where r2.auto = a and r != r2 and r2.inicio > :«fin»)
 		)
 		''', Auto)
+	}
+	
+	private def getFromSQL(Ubicacion ubicacion, Date dia) {
+		val results = createQuery("ubicacion", "ubicacion", "dia", "dia", #[])
+		.setParameter("ubicacion", ubicacion)
+		.setParameter("dia", dia)
+		.resultList
+		
+		cache.save(ubicacion, dia, results)
+		
+		results
 	}
 	
 	static def <T extends Query> setParametersFromExample(T query, Object example) {

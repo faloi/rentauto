@@ -85,6 +85,7 @@ class RepositoryTest extends BasePersistenceTest {
 	@After
 	def void tearDown() {
 		rollbackTransaction()
+		repository.clearCache
 	}
 	
 	@Test
@@ -151,4 +152,51 @@ class RepositoryTest extends BasePersistenceTest {
 		
 		#[hilux].assertEquals(repository.autosReservables(reservaExample))
 	}
+	
+	@Test
+	def void losAutosDisponiblesSeCachean() {
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+	}
+	
+	@Test
+	def void laCacheSeLimpiaAlGuardarUnAutoNuevo() {
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+		
+		val scenic = new Auto("Renault", "Scenic", 2007, "FTS381", new Familiar, 105000d, marDelPlata)
+		persist(scenic)
+		
+		#[gol, hilux, scenic].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+	}	
+	
+	@Test
+	def void laCacheSeLimpiaAlGuardarUnaReservaNueva() {
+		#[gol, hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+		
+		val sanMartin = new Ubicacion("San Martin")
+		persist(sanMartin)
+		
+		val reservaGol = new Reserva => [
+			numeroSolicitud = 999
+			auto = gol
+			origen = marDelPlata
+			destino = sanMartin
+			inicio = nuevaFecha(2015, 11, 1)
+			fin = nuevaFecha(2015, 11, 25)
+			usuario = new Usuario => [
+				nombre = "Miguel"
+				apellido = "Del Sel"
+				username = "miguelds"
+				password = "dameLaPresidencia"
+				email = "miguelds@pro.gov.ar"
+				nacimiento = nuevaFecha(1957, 7, 3)
+				codigo_validacion = "1234567890"				
+			]
+		]
+		
+		gol.agregarReserva(reservaGol)
+		persist(reservaGol)		
+		
+		#[hilux].assertEquals(repository.autosDisponibles(marDelPlata, nuevaFecha(2015, 11, 1)))
+	}	
 }
